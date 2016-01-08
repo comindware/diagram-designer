@@ -8,8 +8,7 @@ all of these should be defined on the global scope
 backbone and marionette will be removed once with fallback to self-hosted models
 
 #requirements
-node.js
-bower
+node.js, bower
 
 #tests
 library uses karma runner with jasmine described tests
