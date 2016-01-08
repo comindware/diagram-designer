@@ -17,7 +17,7 @@ function (helpers)
             this.position = { x: 0, y: 0};
             this.width = 100;
             this.height = 100;
-            this.titleHeight = 15;
+            this.titleHeight = 20;
             this.title = "abstract group";
             this.id = "abstractGroup1";
 

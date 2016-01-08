@@ -23,10 +23,14 @@ function(ToolboxGroup, ToolboxElement, Activity, FlowView, behaviors) {
 
     Circle.Activity = Activity.extend({
         initialize: function(cfg) {
+            behaviors.rectangularResizers.setup(this);
+            behaviors.rectangularShapedConnectorSet.setup(this);
             _.extend(cfg, {
-                template: '<g class="js-activity-resize-root diagram-activity-circle"><circle class="diagram-activity-circle" cx="50" cy="50" r="100"></rect></g>'
+                template: '<g transform="{{dimScale}}" class="js-activity-resize-root diagram-activity-circle"><circle class="diagram-activity-circle js-activity-shape" cx="50" cy="50" r="50"></rect></g>'
             });
             Activity.prototype.initialize.apply(this, [cfg]);
+            this.setupComponentScale(this.activityG);
+            this.setupComponentScale(this.resizersG);
         }
     });
 
@@ -42,10 +46,13 @@ function(ToolboxGroup, ToolboxElement, Activity, FlowView, behaviors) {
             behaviors.rectangularShapedConnectorSet.setup(this);
             _.extend(cfg, {
                 template: '<g transform="{{dimScale}}"  class="js-activity-resize-root">' +
-                    '<rect class="diagram-activity-rectangle" vector-effect="non-scaling-stroke" x="0" y="0" width="100" height="100"></rect>' +
+                    '<rect class="diagram-activity-rectangle js-activity-shape" vector-effect="non-scaling-stroke" x="0" y="0" width="100" height="100"></rect>' +
                 '</g>'
             });
             Activity.prototype.initialize.apply(this, [cfg]);
+            this.setupComponentScale(this.activityG);
+            this.setupComponentScale(this.resizersG);
+
         }
     });
 
@@ -67,8 +74,8 @@ function(ToolboxGroup, ToolboxElement, Activity, FlowView, behaviors) {
         initialize: function() {
             ToolboxElement.prototype.initialize.apply(this, arguments);
             this.tpl = Handlebars.compile(
-                '<path d="M0,12L0,47" stroke="#7f7f7f" stroke-width="2"></path>' +
-                '<polygon points="-5,27 0,11 5,27 -5,27" stroke-width="2" fill="#7f7f7f"></polygon>');
+                '<g transform="translate(13,-6) scale(0.75)"><path d="M0,12L0,47" stroke="#7f7f7f" stroke-width="2"></path>' +
+                '<polygon points="-5,27 0,11 5,27 -5,27" stroke-width="2" fill="#7f7f7f"></polygon></g>');
         }
     });
 
