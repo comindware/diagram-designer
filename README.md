@@ -28,3 +28,9 @@ you probably want bower and karma to be installed globally before this
 npm install -g karma
 npm install -g bower
 ```
+
+#demo
+
+simple github demo (version can be other than current master):
+
+https://rawgit.com/comindware/diagram-designer/trash/githubDemo/demo/github.html
