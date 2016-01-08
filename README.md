@@ -10,19 +10,21 @@ all of these should be defined on the global scope
 backbone and marionette will be removed once with fallback to self-hosted models
 
 #requirements
-node.js, bower
+node.js
 
 #tests
 library uses karma runner with jasmine described tests
-
-karma itself is not included in the dependencies
 
 to run tests
 
 ```
 npm install
-npm install bower -g
-npm install karma -g
 bower install
 karma start
+```
+
+you probably want bower and karma to be installed globally before this
+```
+npm install -g karma
+npm install -g bower
 ```
