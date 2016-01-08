@@ -33,6 +33,12 @@
     stroke-width: 2;
 }
 
+.diagram-activity-rectangle {
+    fill: white;
+    stroke: red;
+    stroke-width: 2;
+}
+
 .diagram-activity-circle {
     fill: white;
     stroke: blue;
@@ -48,7 +54,8 @@
 }
 
 svg {
-    border: 1px solid black;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
 }
 
 .svg-resizer.svg-east-resizer, .svg-resizer.svg-west-resizer {
@@ -85,4 +92,8 @@ circle.dev-diagram-connector.dev-diagram-flow-visible {
 circle.dev-diagram-connector.js-diagram-connector-visible.js-diagram-connector-highlighted {
     fill: #64aad0;
     opacity: 1;
+}
+
+.g-selected .diagram-activity-rectangle, .g-selected .diagram-activity-circle {
+    stroke-width: 3;
 }
