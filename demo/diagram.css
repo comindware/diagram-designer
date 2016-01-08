@@ -1,0 +1,88 @@
+.js-graphContainer {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* svg */
+
+.toolbox-circle-primitive {
+    fill: none;
+    stroke: blue;
+    stroke-width: 1.5;
+}
+
+.toolbox-rectangle-primitive {
+    fill: none;
+    stroke: red;
+    stroke-width: 1.5;
+}
+
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.diagram-activity-rectangle {
+    fill: white;
+    stroke: red;
+    stroke-width: 2;
+}
+
+.diagram-activity-circle {
+    fill: white;
+    stroke: blue;
+    stroke-width: 2;
+}
+
+.drag-point-horizontal {
+    cursor: n-resize;
+}
+
+.drag-point-vertical {
+    cursor: e-resize;
+}
+
+svg {
+    border: 1px solid black;
+}
+
+.svg-resizer.svg-east-resizer, .svg-resizer.svg-west-resizer {
+    cursor: e-resize;
+}
+
+.svg-resizer.svg-north-resizer, .svg-resizer.svg-south-resizer {
+    cursor: n-resize;
+}
+
+.svg-resizer.svg-north-west-resizer, .svg-resizer.svg-south-east-resizer {
+    cursor: nw-resize;
+}
+
+.svg-resizer.svg-north-east-resizer, .svg-resizer.svg-south-west-resizer {
+    cursor: ne-resize;
+}
+
+.svg-resizer {
+    opacity: 0;
+}
+
+circle.dev-diagram-connector {
+    fill: #fff;
+    stroke: #64aad0;
+    stroke-width: 1px;
+    opacity: 0;
+}
+
+circle.dev-diagram-connector.dev-diagram-flow-visible {
+    opacity: 1;
+}
+
+circle.dev-diagram-connector.js-diagram-connector-visible.js-diagram-connector-highlighted {
+    fill: #64aad0;
+    opacity: 1;
+}

@@ -1,0 +1,22 @@
+{
+  "name": "diagram-designer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "karma run"
+  },
+  "keywords": [
+    "diagram",
+    "designer"
+  ],
+  "author": "Nikolay Volf",
+  "license": "MIT",
+  "devDependencies": {
+    "bower": "^1.7.0",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.15",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-jasmine": "^0.3.6"
+  }
+}

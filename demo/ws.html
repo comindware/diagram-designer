@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <script type="text/javascript" src="/designer/bower_components/requirejs/require.js"></script>
+
+    <script type="text/javascript">
+
+        require.config({
+            baseUrl: '/designer',
+            paths: {
+                'd3': 'bower_components/d3/d3',
+                'd3utils': 'js/helpers/d3utils',
+                'jquery': 'bower_components/jquery/dist/jquery',
+                'handlebars': 'bower_components/handlebars/handlebars',
+                'backbone': 'bower_components/backbone/backbone',
+                'marionette': 'bower_components/backbone.marionette/lib/backbone.marionette',
+                'underscore': 'bower_components/underscore/underscore'
+            },
+
+            shim: {
+                'backbone': {
+                    deps: ['jquery', 'underscore'],
+                    exports: 'Backbone'
+                },
+                'underscore': {
+                    exports: '_'
+                },
+                'marionette': {
+                    deps: ['backbone'],
+                    exports: 'Marionette'
+                },
+                'd3': {
+                    exports: 'd3'
+                }
+            }
+        });
+
+        require(["handlebars"], function(handlebars) {
+            window.Handlebars = handlebars;
+            require(["backbone", "marionette"], function() {
+                require(['demo/app'], function(app) {
+                    app.start()
+                });
+            });
+
+        });
+
+    </script>
+
+    <link href="diagram.css" rel="stylesheet" />
+
+</head>
+
+<body>
+    <div class="js-graphContainer"></div>
+</body>
+</html>
