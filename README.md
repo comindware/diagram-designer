@@ -4,7 +4,9 @@ Core library for editing activities and their connections with each other to for
 
 #dependencies
 jquery, underscore, handlebars, backbone, marionette, d3 (listed in bower.json)
+
 all of these should be defined on the global scope
+
 backbone and marionette will be removed once with fallback to self-hosted models
 
 #requirements
@@ -12,6 +14,15 @@ node.js, bower
 
 #tests
 library uses karma runner with jasmine described tests
+
 karma itself is not included in the dependencies
 
-<i>karma start</i>
+to run tests
+
+```
+npm install
+npm install bower -g
+npm install karma -g
+bower install
+karma start
+```
