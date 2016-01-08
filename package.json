@@ -1,6 +1,6 @@
 {
-  "name": "diagram-designer",
-  "version": "1.0.0",
+  "name": "diagram-designer-core",
+  "version": "0.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {

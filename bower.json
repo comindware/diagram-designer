@@ -1,9 +1,10 @@
 {
-  "name": "diagram-designer",
+  "name": "diagram-designer-core",
   "description": "",
   "main": "index.js",
   "authors": [
-    "Nikolay Volf"
+    "Nikolay Volf",
+    "Grigory Kuznetsov"
   ],
   "license": "MIT",
   "keywords": [
