@@ -1,7 +1,6 @@
 define([
-    './subActivity',
     '../utils/d3utils'
-], function (SubactivityView, helpers) {
+], function (helpers) {
     'use strict';
     var titleAreaTemplate = "<div></div>";
 
@@ -72,12 +71,7 @@ define([
 
         initialize: function (cfg) {
             this.__readConfig(cfg || {});
-
-            this.subActivities = new SubactivityView({ parent: this });
-            this.listenTo(this.subActivities, 'subactivitydrag', this.subActivityDrag.bind(this));
-
             this.debounceInitializeDrag = helpers.getDebouncedHandler(this.initializeDrag, 100, this);
-
             if (!this.isHidden)
                 this.render();
         },
@@ -141,8 +135,7 @@ define([
         },
 
         beforeActivityResize: function () {
-            this.hideInfoBtn();
-            this.hideSubActivities();
+            this.__hideControlElements();
             this.applyGhostSize();
         },
 
@@ -388,14 +381,14 @@ define([
             this.futureRect && this.futureRect.remove();
         },
 
-        subActivityDrag: function (e) {
-            $.extend(e, { sourceActivity: this, subActivity: true });
+        //subActivityDrag: function (e) {
+        //    $.extend(e, { sourceActivity: this, subActivity: true });
+        //
+        //    this.parent.trigger('newActivityDrag', e);
+        //},
 
-            this.parent.trigger('newActivityDrag', e);
-        },
-
-        appendSubActivities: function () {
-        },
+        //appendSubActivities: function () {
+        //},
 
         beforeModelUpdated: function() {
 
@@ -430,7 +423,6 @@ define([
 
         startDrag: function () {
             this.moveToFront();
-            this.hideSubActivities();
             this.ghostPosition = this.getPosition();
             this.ghostEntity && !this.isTemp && this.showGhostEntity();
             this.infoBtn && this.hideInfoBtnUser(0);
@@ -553,7 +545,6 @@ define([
         __updateParentContainers: function() {
             this.ghostG = this.__resolveParentContainer('ghost-g');
             this.selectG = this.__resolveParentContainer('select-g');
-            this.subActivityG = this.__resolveParentContainer('subactivity-g');
             this.overlayG = this.__resolveParentContainer('overlay-g');
         },
 
@@ -808,9 +799,13 @@ define([
                 this.parent.nullSpaceClick({ sourceActivity: this, d3event: d3.event });
         },
 
+        __hideControlElements: function() {
+            this.infoBtn && this.infoBtn.hide();
+        },
+
         showActivityInfo: function () {
+            this.__hideControlElements();
             this.infoBtn.isActive = true;
-            this.selected && this.hideSubActivities();
             this.activityInfo.show();
         },
 
@@ -984,11 +979,6 @@ define([
             });
         },
 
-        setSubActivityPosition: function (position) {
-            var effectivePosition = position || this.getPosition();
-            helpers.applyTranslation(this.subActivities.rootNode, effectivePosition);
-        },
-
         setGhostPosition: function (newGhostPosition) {
             var effectivePosition = newGhostPosition || this.ghostPosition;
             this.ghostEntity && helpers.applyTranslation(this.ghostEntity, effectivePosition);
@@ -1036,33 +1026,23 @@ define([
                 _.invoke(this.getLinkedActivities(), "deselect", false);
         },
 
+        __showDefaultControlElement: function() {
+
+        },
+
         whenSelected: function (isShown, userAction) {
-            isShown && userAction ? this.showSubActivities() : this.hideSubActivities();
-            this.rootNode.selectAll('.when-selected')
-                .style({'display': isShown ? 'block' : 'none'});
+            isShown && userAction
+                ? this.__showDefaultControlElement()
+                : this.__hideControlElements();
+
+            this.rootNode.selectAll('.when-selected').style({'display': isShown ? 'block' : 'none'});
             this.selectBorder && this.selectBorder.style({'display': isShown ? 'block' : 'none'});
+
             var classed = {};
             classed[this.selectedClassName] = isShown;
             this.activityG.classed(classed);
         },
 
-        showSubActivities: function () {
-            if (this.parent.isReadOnly)
-                return;
-
-            this.subActivities.removeAll();
-            this.appendSubActivities();
-            this.subActivities.render();
-
-            var pos = this.getPosition();
-
-            this.subActivities.rootNode
-                .style({'display': 'block'});
-        },
-
-        hideSubActivities: function () {
-            this.subActivities.hide();
-        },
 
         connectorMouseDown: function () {
         },
@@ -1709,7 +1689,7 @@ define([
             rect.height = titleLayout.height;
             rect = self.transformSvgRect(rect);
 
-            self.hideSubActivities();
+            self.__hideControlElements();
 
             var editorHtml = self.titleTemplate(_.extend({ titleWidth: titleLayout.textWidth, title: self.model.attributes.title, isEdited: true }, titleLayout));
 

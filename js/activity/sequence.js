@@ -3,20 +3,20 @@ define(['../utils/d3utils'],
 function (helpers) {
     'use strict';
 
-    var SubActivitiesViewModel = Marionette.Object.extend({
+    var ActivitySequence = Marionette.Object.extend({
         initialize: function (cfg) {
-            this.parent = cfg.parent;
+            this.container = cfg.container;
             this.items = cfg.items || [];
+            this.layoutFunc = cfg.layoutFunc || this.layoutFuncDefault;
+            this.position = cfg.position;
         },
 
         render: function () {
-            var pos = this.parent.getPosition();
-
             if (this.rootNode)
                 this.rootNode.remove();
 
-            this.rootNode = this.parent.subActivityG.append('g')
-                .attr('transform', 'translate(' + pos.x + ',' + pos.y + ')')
+            this.rootNode = this.container.append('g')
+                .attr('transform', 'translate(' + this.position.x + ',' + this.position.y + ')')
                 .style({'display': 'none'})
                 .classed({
                     'subActivities': true,
@@ -42,13 +42,41 @@ function (helpers) {
 
         hide: function() {
             this.rootNode && this.rootNode.style({'display': 'none'});
+        },
+
+        layoutFuncDefault: function(index) {
+            return { x: 0, y: index * 30 }
         }
     });
 
-    SubActivitiesViewModel.height = 30;
-    SubActivitiesViewModel.width = 30;
+    ActivitySequence.create = function(options, items) {
+        var effectiveItems = _.map(items, function(item) {
+            return ActivitySequence.BaseSequenceMember.extend(item);
+        })
 
-    SubActivitiesViewModel.mousedown = function () {
+        var sequence = new ActivitySequence(_.extend(options, { items: effectiveItems }));
+
+        _.each(sequence.items, function(item, index) {
+            var newPosition = sequence.layoutFuncDefault(index);
+            _.extend(item, newPosition);
+
+            sequence.listenTo(item, "element:drag", function(options) {
+                _.extend(options, { sequence: sequence });
+                sequence.trigger("element:drag", options);
+            });
+            sequence.listenTo(item, "element:click", function(options) {
+                _.extend(options, { sequence: sequence });
+                sequence.trigger("element:click", options);
+            });
+        });
+
+        return sequence;
+    };
+
+    ActivitySequence.height = 30;
+    ActivitySequence.width = 30;
+
+    ActivitySequence.mousedown = function () {
 
         this.dragX = event.clientX;
         this.dragY = event.clientY;
@@ -61,13 +89,14 @@ function (helpers) {
 
                 return;
 
-            this.parent.parent.parent.addActiveType({
-                type: this.type,
-                kind: this.kind,
-                clientX: event.clientX,
-                clientY: event.clientY,
-                sourceActivity: this.parent.parent
-            });
+            this.trigger("element:drag",
+                {
+                    clientX: event.clientX,
+                    clientY: event.clientY,
+                    source: this
+                }
+            );
+
 
             d3.event.stopPropagation();
 
@@ -77,7 +106,7 @@ function (helpers) {
 
         this.backElement.on("mouseup", function() {
             if (this.dragInitiated) {
-                SubActivitiesViewModel.mouseclick.apply(this, [event]);
+                ActivitySequence.mouseclick.apply(this, [event]);
             }
             this.backElement.on("mouseup", null);
             this.backElement.on("mousemove", null);
@@ -88,53 +117,45 @@ function (helpers) {
 
     };
 
-    SubActivitiesViewModel.mouseclick = function (e) {
+    ActivitySequence.mouseclick = function (e) {
         this.dragInititated = false;
 
         if (this.type == "Flow")
             return;
 
-        this.parent.parent.parent.initNewCommand();
-
-        var newActivity =
-            this.parent.parent.parent.addNewActivity({
-                type: this.type,
-                kind: this.kind
-            },
+        this.trigger("element:click",
             {
-                connect: this.parent.parent,
-                inverse: e.shiftKey,
-                direction: { x: 1, y: 0 },
-                align: true,
-                select: true,
-                currentOwner: true
-            });
-
-        this.parent.parent.parent.finalizeNewOrUpdateCommand([newActivity]);
-
+                clientX: event.clientX,
+                clientY: event.clientY,
+                originalEvent: e,
+                source: this
+            }
+        );
         d3.event.stopPropagation();
     };
 
-    SubActivitiesViewModel.onmouseover = function () {
+    ActivitySequence.onmouseover = function () {
         this.hoverShadow.style('display', 'block');
     };
 
-    SubActivitiesViewModel.onmouseout = function () {
+    ActivitySequence.onmouseout = function () {
         this.hoverShadow.style('display', 'none');
     };
 
-    SubActivitiesViewModel.BaseSubactivityElement = Marionette.Object.extend({
-        type: "None",
-        kind: "None",
-
+    ActivitySequence.BaseSequenceMember = Marionette.Object.extend({
         backWidth: 30,
         backHeight: 30,
 
+        initialize: function(options) {
+            _.extend(this, options);
+            if (!this.x0)
+                this.x = 0;
+            if (!this.y)
+                this.y = 0;
+        },
+
         getHelper: function() {
-            return {
-                kind: this.kind,
-                type: this.type
-            };
+            return this.toJSON()
         },
 
         getPosition: function() {
@@ -169,11 +190,11 @@ function (helpers) {
             this.backElement
                 .property('type', self.type)
                 .property('kind', self.kind)
-                .on('mousedown', SubActivitiesViewModel.mousedown.bind(this))
-                .on('mouseclick', SubActivitiesViewModel.mouseclick.bind(this))
+                .on('mousedown', ActivitySequence.mousedown.bind(this))
+                .on('mouseclick', ActivitySequence.mouseclick.bind(this))
 
         }
     });
 
-    return SubActivitiesViewModel;
+    return ActivitySequence;
 });

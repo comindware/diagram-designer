@@ -1,4 +1,4 @@
-define(["js/activity/activity", './renderHelpers'], function(Activity, renderHelpers) {
+define(["js/activity/activity", './renderHelpers', 'js/activity/sequence'], function(Activity, renderHelpers, ActivitySequence) {
 
     var FakeParent = function() {
         this.isFake = true;
@@ -109,6 +109,34 @@ define(["js/activity/activity", './renderHelpers'], function(Activity, renderHel
             expect(activity.appendViewItems).toHaveBeenCalledTimes(1);
         })
 
+
+    });
+
+    describe("activity sequences", function() {
+        beforeEach(function() {
+            renderHelpers.setupSvgWithContainer(this);
+        });
+
+        afterEach(function() {
+            renderHelpers.teardownSvgWithContainer(this);
+        });
+
+        it("can be created", function() {
+
+            var ooloredSequences = ActivitySequence.create({}, [
+                {
+                    tpl: Handlebars.compile("<circle class='js-toolbox toolbox-circle-primitive' stroke='red' cx=15 cy=15 r=10 />")
+                },
+                {
+                    tpl: Handlebars.compile("<circle class='js-toolbox toolbox-circle-primitive' stroke='yellow' cx=15 cy=15 r=10 />")
+                },
+                {
+                    tpl: Handlebars.compile("<circle class='js-toolbox toolbox-circle-primitive' stroke='blue' cx=15 cy=15 r=10 />")
+                }
+            ]);
+
+            expect(ooloredSequences.items.length).toBe(3);
+        })
 
     });
 

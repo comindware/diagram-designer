@@ -4,7 +4,8 @@ define([
     './RectangularShapedConnectorSet',
     './CenterAlignedTitleLayout',
     './RollingSubactivitySet',
-    './RectangularResizers'
+    './RectangularResizers',
+    './SubActivitySpawnSequence'
 ],
 
 function(
@@ -13,7 +14,8 @@ function(
     RectangularShapedConnectorSetBehavior,
     CenterAlignedTitleLayoutBehavior,
     RollingSubactivitySetBehavior,
-    RectangularResizers)
+    RectangularResizers,
+    SubActivitySpawnSequence)
 {
     var behaviors = {
         mountSurface: MountSurfaceBehavior,
@@ -21,7 +23,8 @@ function(
         rectangularShapedConnectorSet: RectangularShapedConnectorSetBehavior,
         centerAlignedTitleLayout: CenterAlignedTitleLayoutBehavior,
         rollingSubactivitySet: RollingSubactivitySetBehavior,
-        rectangularResizers: RectangularResizers
+        rectangularResizers: RectangularResizers,
+        subActivitySpawnSequence: SubActivitySpawnSequence
     };
 
     _.each(behaviors, function(behavior, behaviorKey) {

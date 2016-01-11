@@ -1,6 +1,6 @@
 define([
     '../utils/d3utils',
-    '../activity/subActivity'
+    '../activity/sequence'
 ], function(helpers, SubactivityView) {
 
     'use strict';

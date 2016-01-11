@@ -3,10 +3,11 @@ define([
     './toolboxElement',
     '../activity/activity',
     '../activity/flow',
+    '../activity/sequence',
     '../behaviors/api'
 ],
 
-function(ToolboxGroup, ToolboxElement, Activity, FlowView, behaviors) {
+function(ToolboxGroup, ToolboxElement, Activity, FlowView, ActivitySequence, behaviors) {
 
     var Circle = function() {
         this.offset = { left: 0, top: 0 };
@@ -33,6 +34,18 @@ function(ToolboxGroup, ToolboxElement, Activity, FlowView, behaviors) {
             this.setupComponentScale(this.resizersG);
         }
     });
+
+    Circle.ColorSequence = ActivitySequence.create({}, [
+        {
+            tpl: Handlebars.compile("<circle class='js-toolbox toolbox-circle-primitive' stroke='red' cx=15 cy=15 r=10 />")
+        },
+        {
+            tpl: Handlebars.compile("<circle class='js-toolbox toolbox-circle-primitive' stroke='yellow' cx=15 cy=15 r=10 />")
+        },
+        {
+            tpl: Handlebars.compile("<circle class='js-toolbox toolbox-circle-primitive' stroke='blue' cx=15 cy=15 r=10 />")
+        }
+    ]);
 
     var Rectangle = function() {
         this.offset = { left: 40, top: 0 };

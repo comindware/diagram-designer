@@ -19,10 +19,7 @@ var compiler = webpack(
     }
 );
 
-compiler.watch({
-    aggregateTimeout: 300,
-    poll: true
-}, function(err, stats) {
+compiler.run(function(err, stats) {
     if (err)
         console.log(err);
     else {
