@@ -13,7 +13,7 @@ var compiler = webpack(
         },
         resolve: {
             root: [
-                __dirname + '/js',
+                __dirname + '/js'
             ]
         }
     }
