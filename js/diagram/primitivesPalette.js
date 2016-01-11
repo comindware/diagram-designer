@@ -24,28 +24,27 @@ function(ToolboxGroup, ToolboxElement, Activity, FlowView, ActivitySequence, beh
 
     Circle.Activity = Activity.extend({
         initialize: function(cfg) {
-            behaviors.rectangularResizers.setup(this);
-            behaviors.rectangularShapedConnectorSet.setup(this);
+            behaviors.setupDeclarative(this,
+                'rectangular-resizers',
+                'rectangular-shaped-connector-set');
             behaviors.subActivitySpawnSequence.setup(this, { sequence: Circle.ColorSequence() });
             _.extend(cfg, {
                 template: '<g transform="{{dimScale}}" class="js-activity-resize-root diagram-activity-circle"><circle class="diagram-activity-circle js-activity-shape" cx="50" cy="50" r="50"></rect></g>'
             });
             Activity.prototype.initialize.apply(this, [cfg]);
-            this.setupComponentScale(this.activityG);
-            this.setupComponentScale(this.resizersG);
         }
     });
 
     Circle.ColorSequence = function() {
         return ActivitySequence.create({type: 'Circle'}, [
             {
-                tpl: Handlebars.compile("<circle class='js-toolbox toolbox-circle-primitive' stroke='red' cx=15 cy=15 r=10 />")
+                tpl: Handlebars.compile("<circle fill='white' stroke='red' cx=15 cy=15 r=10 />")
             },
             {
-                tpl: Handlebars.compile("<circle class='js-toolbox toolbox-circle-primitive' stroke='yellow' cx=15 cy=15 r=10 />")
+                tpl: Handlebars.compile("<circle fill='white' stroke='yellow' cx=15 cy=15 r=10 />")
             },
             {
-                tpl: Handlebars.compile("<circle class='js-toolbox toolbox-circle-primitive' stroke='blue' cx=15 cy=15 r=10 />")
+                tpl: Handlebars.compile("<circle fill='white' stroke='blue' cx=15 cy=15 r=10 />")
             }
         ]);
     };
@@ -58,19 +57,35 @@ function(ToolboxGroup, ToolboxElement, Activity, FlowView, ActivitySequence, beh
 
     Rectangle.Activity = Activity.extend({
         initialize: function(cfg) {
-            behaviors.rectangularResizers.setup(this);
-            behaviors.rectangularShapedConnectorSet.setup(this);
+            behaviors.setupDeclarative(this,
+                'rectangular-resizers',
+                'rectangular-shaped-connector-set',
+                'info-button');
+            behaviors.subActivitySpawnSequence.setup(this, { sequence: Rectangle.ColorSequence() });
+
             _.extend(cfg, {
                 template: '<g transform="{{dimScale}}"  class="js-activity-resize-root">' +
                     '<rect class="diagram-activity-rectangle js-activity-shape" vector-effect="non-scaling-stroke" x="0" y="0" width="100" height="100"></rect>' +
                 '</g>'
             });
             Activity.prototype.initialize.apply(this, [cfg]);
-            this.setupComponentScale(this.activityG);
-            this.setupComponentScale(this.resizersG);
 
         }
     });
+
+    Rectangle.ColorSequence = function() {
+        return ActivitySequence.create({type: 'Rectangle'}, [
+            {
+                tpl: Handlebars.compile("<rect fill='white' stroke='olive'x=2 y=2  width=16 height=10 />")
+            },
+            {
+                tpl: Handlebars.compile("<rect fill='white' stroke='navy' x=2 y=2 width=16 height=10 />")
+            },
+            {
+                tpl: Handlebars.compile("<rect fill='white' stroke='pink' x=2 y=2  width=16 height=10 />")
+            }
+        ]);
+    };
 
     Rectangle.ToolboxElement = ToolboxElement.extend({
 

@@ -82,7 +82,7 @@ function (helpers, ActivityViewModel, astar) {
             return { 'activity': true };
         },
 
-        bindEvents: function () {
+        __bindEvents: function () {
             var self = this;
             var binded = this.connectorMouseDown.bind(this);
             this.rootNode.selectAll('.js-diagram-connector').on('mousedown', function() { binded(this); });
@@ -116,16 +116,14 @@ function (helpers, ActivityViewModel, astar) {
             this.mouseEnterSegment = {
                 index: d3Target.property('index'),
                 isHorizontal: d3Target.property('isHorizontal'),
-                position: this.getEventPosition()
+                position: this.__getEventPosition()
             };
-
-            this.infoBtnShowTimer = setTimeout(this.showInfoBtnUser.bind(this), 200);
 
             d3Target.on("mousemove", function() {
                 this.moveEvent = this.moveEvent || {};
                 this.moveEvent.clientX = d3.event.clientX;
                 this.moveEvent.clientY = d3.event.clientY;
-                this.moveInfoButtonCloser();
+                this.__moveAttractionPoint();
             }.bind(this));
             d3Target.on("mouseleave", function() { this.moveEvent = null; d3Target.on("mousemove", null);}.bind(this));
 
@@ -137,11 +135,9 @@ function (helpers, ActivityViewModel, astar) {
             }.bind(this));
         },
 
-        moveInfoButtonCloser: _.debounce(function() {
+        __moveAttractionPoint: _.debounce(function() {
             if (!this.moveEvent)
                 return;
-
-            this.parent.hideActivityInfo();
 
             var closerTo = this.getEventPosition(this.moveEvent);
             var dx = helpers.substractPoint(closerTo, this.mouseEnterSegment.position);
@@ -150,22 +146,16 @@ function (helpers, ActivityViewModel, astar) {
                 dx,
                 this.mouseEnterSegment.isHorizontal ? [1, 0] : [0, 1]);
 
-            this.syncInfoButtonPosition();
+            this.__setAttractionPoint();
 
         }, 600),
 
-        dragPointMouseLeave: function() {
-            this.infoBtnShowTimer && clearTimeout(this.infoBtnShowTimer);
-            this.hideInfoBtnUser();
-        },
-
-        bindHoverEvents: function() {
-        },
-
-        getInfoBtnPosition: function() {
-            if (!this.mouseEnterSegment)
+        __setAttractionPoint: function() {
+            if (!this.mouseEnterSegment) {
                 //throw "I never expected you would call me before mouse actually enters one of my drag regions (dragPointMouseEnter)";
-                return { x: 0, y: 0};
+                this.__attractionPoint = {x: 0, y: 0};
+                return;
+            }
 
             var mouse = this.mouseEnterSegment.position;
             var isHorizontal = this.mouseEnterSegment.isHorizontal;
@@ -195,12 +185,15 @@ function (helpers, ActivityViewModel, astar) {
             }
 
 
-            var position = this.mouseEnterSegment.isHorizontal
+            this.__attractionPoint = this.mouseEnterSegment.isHorizontal
                 ? helpers.sumPoints([mouse.x, rect.y], [0, -5])
                 : helpers.sumPoints([rect.x + rect.width, mouse.y], [0, 0]);
+        },
 
-            return position;
+        dragPointMouseLeave: function() {
+        },
 
+        bindHoverEvents: function() {
         },
 
         getDraggedConnectors: function () {
@@ -562,7 +555,7 @@ function (helpers, ActivityViewModel, astar) {
 
         setDraggedConnectorPosition: function(position) {
             helpers.updatePoint(this.draggedConnector, position);
-            this.syncConnectorNode(this.draggedConnector);
+            this.__syncConnectorNode(this.draggedConnector);
             this.draggedConnectorMoved();
         },
 
@@ -572,7 +565,7 @@ function (helpers, ActivityViewModel, astar) {
             else if (this.draggedConnector.index == constants.connection.target)
                 this.updateToAlignment(targetConnectorConfig);
 
-            this.syncConnectorNode(_.extend({}, this.draggedConnector, position));
+            this.__syncConnectorNode(_.extend({}, this.draggedConnector, position));
         },
 
         updatePathSegmentPosition: function(delta, segment) {

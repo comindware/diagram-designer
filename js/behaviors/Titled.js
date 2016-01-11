@@ -4,7 +4,7 @@ define([], function() {
 
     return Marionette.Object.extend({
 
-        id: 'center-aligned-title-layout',
+        id: 'titled',
 
         apply: function(activity) {
             activity.getTitleLayout = this.getTitleLayout.bind(activity);

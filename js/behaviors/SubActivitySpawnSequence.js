@@ -4,6 +4,8 @@ define(['../utils/d3utils'], function(helpers) {
 
     return Marionette.Object.extend({
 
+        id: 'subactivity-spawn-sequence',
+
         apply: function(activity, options) {
 
             activity.afterResize = _.wrap(activity.afterResize, this.afterResize);

@@ -127,7 +127,7 @@ define([
         },
 
         areConnectionEventsTriggered: function() {
-            return !this.ghostEntity;
+            return !this.__ghostEntity;
         },
 
         areDragOverEventsTriggered: function() {
@@ -136,50 +136,52 @@ define([
 
         beforeActivityResize: function () {
             this.__hideControlElements();
-            this.applyGhostSize();
+            this.__applyGhostSize();
         },
 
         afterResize: function(e) {
 
         },
 
-        syncD3Elements: function() {
-            this.setActualDrawingPosition();
-            this.setupComponentScale(this.activityG);
-            this.setupComponentScale(this.resizersG);
+        __syncScalableComponents: function() {
+            this.__setupComponentScale(this.activityG);
+            this.__setupComponentScale(this.resizersG);
             this.activityG.selectAll(".js-activity-body").attr({
                 width: this.getDimensions().width,
                 height: this.getDimensions().height
             });
-            this.syncConnectorNodes();
-            this.appendTitle();
-            this.syncInfoButtonPosition();
         },
 
-        syncInfoButtonPosition: function() {
-            this.infoBtn && this.infoBtn.attr(helpers.getTranslationAttribute(this.getInfoBtnPosition()));
+        __updateControlNodes: function() {
         },
 
-        getEventPosition: function(optionalEvent) {
+        __syncD3Elements: function() {
+            this.__setActualDrawingPosition();
+            this.__syncScalableComponents();
+            this.__syncConnectorNodes();
+            this.__updateControlNodes();
+        },
+
+        __getEventPosition: function(optionalEvent) {
             var parentPosition = this.parent.getEventPosition(optionalEvent);
             return helpers.getTransformedPoint(parentPosition, this.getPosition(), [-1, -1]);
         },
 
         onfinishResize: function () {
-            if (this.ghostEntity) {
+            if (this.__ghostEntity) {
                 this.setEffectiveRect(
                     {
-                        x: this.ghostPosition.x,
-                        y: this.ghostPosition.y,
-                        width: this.ghostWidth,
-                        height: this.ghostHeight
+                        x: this.__ghostPosition.x,
+                        y: this.__ghostPosition.y,
+                        width: this.__ghostWidth,
+                        height: this.__ghostHeight
                     },
                     true);
 
-                this.hideGhostEntity();
-                delete this.ghostPosition;
+                this.__hideGhostEntity();
+                delete this.__ghostPosition;
 
-                this.syncD3Elements();
+                this.__syncD3Elements();
             }
 
             var dimensions = this.getDimensions();
@@ -203,7 +205,7 @@ define([
             delete this.dragStartPosition;
 
             this.selected && this.select();
-            this.infoBtn && this.showInfoBtn();
+            this.__updateControlNodes();
             this.updateFlow();
         },
 
@@ -218,8 +220,8 @@ define([
         },
 
         updateSize: function (delta) {
-            if (this.ghostEntity) {
-                this.updateGhostSize(delta);
+            if (this.__ghostEntity) {
+                this.__updateGhostSize(delta);
                 return;
             }
             var place = this.getPlacedRect();
@@ -232,55 +234,49 @@ define([
             };
 
             this.__doBeforeActivityResize(newPosition);
-
             this.setEffectiveRect(newPosition, true);
-
-            this.setupComponentScale(this.activityG);
-            this.setupComponentScale(this.resizersG);
-
-            this.setActualDrawingPosition();
             this.updateFlow();
         },
 
-        updateGhostSize: function (delta) {
+        __updateGhostSize: function (delta) {
             var place = this.getPlacedRect();
 
-            !this.ghostWidth && (this.ghostWidth = place.width);
-            !this.ghostHeight && (this.ghostHeight = place.height);
+            !this.__ghostWidth && (this.__ghostWidth = place.width);
+            !this.__ghostHeight && (this.__ghostHeight = place.height);
 
             var newPosition = {
-                x: this.ghostPosition.x + (this.resizeVector.x < 0 ? delta.x : 0),
-                y: this.ghostPosition.y + (this.resizeVector.y < 0 ? delta.y : 0),
-                width: this.ghostWidth + delta.x * this.resizeVector.x,
-                height: this.ghostHeight + delta.y * this.resizeVector.y
+                x: this.__ghostPosition.x + (this.resizeVector.x < 0 ? delta.x : 0),
+                y: this.__ghostPosition.y + (this.resizeVector.y < 0 ? delta.y : 0),
+                width: this.__ghostWidth + delta.x * this.resizeVector.x,
+                height: this.__ghostHeight + delta.y * this.resizeVector.y
             };
 
             this.__doBeforeUpdateSize(newPosition);
 
-            this.ghostPosition = { x: newPosition.x, y: newPosition.y };
-            this.setGhostPosition();
-            this.applyGhostSize(newPosition.width, newPosition.height);
+            this.__ghostPosition = { x: newPosition.x, y: newPosition.y };
+            this.__setGhostPosition();
+            this.__applyGhostSize(newPosition.width, newPosition.height);
         },
 
-        applyGhostSize: function (width, height) {
+        __applyGhostSize: function (width, height) {
 
             if (!this.hasDimensions)
                 return;
 
             var dimensions = this.getDimensions();
-            this.ghostWidth = width || dimensions.width;
-            this.ghostHeight = height || dimensions.height;
+            this.__ghostWidth = width || dimensions.width;
+            this.__ghostHeight = height || dimensions.height;
 
-            this.ghostEntity && this.ghostEntity.attr({
-                'width': this.ghostWidth,
-                'height': this.ghostHeight
+            this.__ghostEntity && this.__ghostEntity.attr({
+                'width': this.__ghostWidth,
+                'height': this.__ghostHeight
             });
 
-            this.ghostEntity && this.setupComponentScale(this.ghostEntity,
-                { width: this.ghostWidth, height: this.ghostHeight });
+            this.__ghostEntity && this.__setupComponentScale(this.__ghostEntity,
+                { width: this.__ghostWidth, height: this.__ghostHeight });
         },
 
-        setupComponentScale: function(node, dimensions) {
+        __setupComponentScale: function(node, dimensions) {
             var effectiveDimensions = dimensions || this.getDimensions();
             node.selectAll(".js-activity-resize-root")
                 .attr("transform", this.getDimensionTranslation(effectiveDimensions));
@@ -332,6 +328,8 @@ define([
 
             if ((update.position || update.size) && !skipRedraw)
                 this.redrawAll();
+
+            this.__syncScalableComponents();
         },
 
         redrawActivityG: function () {
@@ -339,7 +337,7 @@ define([
             this.appendViewItems();
             this.resizeRoot = this.activityG.select(".js-activity-resize-root");
             this.appendTitle();
-            this.bindEvents();
+            this.__bindEvents();
         },
 
         __pushConnector: function(connector) {
@@ -376,27 +374,18 @@ define([
         },
 
         removeEnities: function () {
-            this.ghostEntity && this.ghostEntity.remove();
+            this.__ghostEntity && this.__ghostEntity.remove();
             this.selectBorder && this.selectBorder.remove();
             this.futureRect && this.futureRect.remove();
         },
 
-        //subActivityDrag: function (e) {
-        //    $.extend(e, { sourceActivity: this, subActivity: true });
-        //
-        //    this.parent.trigger('newActivityDrag', e);
-        //},
-
-        //appendSubActivities: function () {
-        //},
-
-        beforeModelUpdated: function() {
+        __beforeModelUpdated: function() {
 
         },
 
         modelUpdated: function () {
             this.redrawAll();
-            this.ghostEntity && this.applyGhostSize();
+            this.__ghostEntity && this.__applyGhostSize();
 
             if (this.model.get("owner"))
                 this.owner = this.parent.getViewModelById(this.model.get("owner"));
@@ -423,9 +412,9 @@ define([
 
         startDrag: function () {
             this.moveToFront();
-            this.ghostPosition = this.getPosition();
-            this.ghostEntity && !this.isTemp && this.showGhostEntity();
-            this.infoBtn && this.hideInfoBtnUser(0);
+            this.__ghostPosition = this.getPosition();
+            this.__ghostEntity && !this.isTemp && this.__showGhostEntity();
+            this.__hideControlElements();
         },
 
         onPlaced: function () {
@@ -453,13 +442,13 @@ define([
                 this.setDraggedEffectivePosition(gridAligned);
             }
 
-            if (this.ghostEntity)
-                this.hideGhostEntity();
+            if (this.__ghostEntity)
+                this.__hideGhostEntity();
 
-            if (this.ghostPosition && !this.isTemp) {
-                this.setRealPosition(this.ghostPosition);
+            if (this.__ghostPosition && !this.isTemp) {
+                this.setRealPosition(this.__ghostPosition);
             }
-            delete this.ghostPosition;
+            delete this.__ghostPosition;
 
             if (this.isTemp)
                 this.onPlaced(e);
@@ -474,11 +463,11 @@ define([
             this.parent.enforceFlowLinkedActivity(_.first(flows), this);
         },
 
-        updateGhostPosition: function (positionDelta) {
-            if (!this.ghostPosition)
-                this.ghostPosition = this.getPosition();
-            helpers.transformPoint(this.ghostPosition, positionDelta);
-            this.setGhostPosition();
+        __updateGhostPosition: function (positionDelta) {
+            if (!this.__ghostPosition)
+                this.__ghostPosition = this.getPosition();
+            helpers.transformPoint(this.__ghostPosition, positionDelta);
+            this.__setGhostPosition();
         },
 
         setRealPosition: function(position) {
@@ -492,14 +481,14 @@ define([
         },
 
         updatePosition: function (positionDelta) {
-            if (!this.isTemp && this.ghostEntity) {
-                this.updateGhostPosition(positionDelta);
+            if (!this.isTemp && this.__ghostEntity) {
+                this.__updateGhostPosition(positionDelta);
                 return;
             }
             this.moveActivity(positionDelta);
         },
 
-        setActualDrawingPosition: function () {
+        __setActualDrawingPosition: function () {
             this.setDrawingPosition(this.getPosition());
         },
 
@@ -582,7 +571,7 @@ define([
             node.datum(this);
 
             this.appendViewItems(node);
-            this.ghostEntity && this.setGhostPosition(position);
+            this.__ghostEntity && this.__setGhostPosition(position);
 
             return node;
         },
@@ -684,23 +673,23 @@ define([
         },
 
 
-        showGhostEntity: function () {
-            if (!this.ghostEntity)
+        __showGhostEntity: function () {
+            if (!this.__ghostEntity)
                 return;
 
-            this.ghostPosition = this.getPosition();
-            this.setGhostPosition();
+            this.__ghostPosition = this.getPosition();
+            this.__setGhostPosition();
 
-            this.ghostMode = true;
+            this.__ghostMode = true;
 
             this.activityG.attr({'opacity': '0.4'});
-            this.ghostEntity.style({'display': 'block'});
+            this.__ghostEntity.style({'display': 'block'});
         },
 
-        hideGhostEntity: function () {
+        __hideGhostEntity: function () {
             this.activityG.attr({'opacity': '1'});
-            this.ghostEntity.style({'display': 'none'});
-            this.ghostMode = true;
+            this.__ghostEntity.style({'display': 'none'});
+            this.__ghostMode = true;
         },
 
         removeFutureRect: function () {
@@ -738,8 +727,8 @@ define([
             this.activityG.selectAll(".debug").remove();
         },
 
-        bindEvents: function () {
-            var self = this;
+        __bindEvents: function () {
+            var self = this ;
 
             function handleResize() {
                 var d3this = d3.select(this);
@@ -750,13 +739,10 @@ define([
 
             this.activityG.on('mousedown', this.mousedown.bind(this));
             this.activityG.on('click', this.activityOnclick.bind(this));
-            this.infoBtn && this.infoBtn.on('click', this.infoBtnOnclick.bind(this));
             this.rootNode.selectAll('.js-diagram-connector').on('mousedown', this.connectorMouseDown.bind(this));
 
             this.resizersG.selectAll('.svg-resizer').on('mousedown', handleResize);
             this.activityG.selectAll('.js-resizer').on('mousedown', handleResize);
-
-            this.bindHoverEvents();
         },
 
         destroy: function() {
@@ -800,13 +786,6 @@ define([
         },
 
         __hideControlElements: function() {
-            this.infoBtn && this.infoBtn.hide();
-        },
-
-        showActivityInfo: function () {
-            this.__hideControlElements();
-            this.infoBtn.isActive = true;
-            this.activityInfo.show();
         },
 
         resizerMouseDown: function (e) {
@@ -816,7 +795,7 @@ define([
             if (e.cancel)
                 return;
 
-            this.ghostEntity && this.showGhostEntity();
+            this.__ghostEntity && this.__showGhostEntity();
 
             var size = this.getDimensions();
             this.startHeight = size.height;
@@ -831,16 +810,7 @@ define([
         },
 
         showHighlightedConnectors: function (conCfg) {
-            //this.rootNode
-            //    .selectAll('.js-diagram-connector-visible[index="' + conCfg.index + '"]')
-            //    .classed('js-diagram-connector-highlighted', true);
-        },
 
-        clearConnectorState: function (conCfg) {
-            //this.rootNode
-            //    .selectAll('.js-diagram-connector-visible[index="' + conCfg.index + '"]')
-            //    .classed('.js-diagram-connector-highlighted', false);
-            delete this.tempLinked;
         },
 
         setTempLinked: function (source, target) {
@@ -946,12 +916,12 @@ define([
         },
 
         isDraggedWithGhost: function () {
-            return this.ghostMode;
+            return this.__ghostMode;
         },
 
         setDraggedVirtualPosition: function (position) {
             if (this.isDraggedWithGhost())
-                this.setGhostPosition(position);
+                this.__setGhostPosition(position);
             else
                 this.setDrawingPosition(position);
 
@@ -960,14 +930,14 @@ define([
 
         setDraggedEffectivePosition: function (position) {
             var dimensions = this.getDimensions();
-            var original = this.isDraggedWithGhost() ? this.ghostPosition : this.getPosition();
-            var method = this.isDraggedWithGhost() ? this.updateGhostPosition : this.moveActivity;
+            var original = this.isDraggedWithGhost() ? this.__ghostPosition : this.getPosition();
+            var method = this.isDraggedWithGhost() ? this.__updateGhostPosition : this.moveActivity;
             var newPosition = helpers.substractPoint(position, original);
 
             method.apply(this, [newPosition]);
 
             _.each(this.getMountedChildren(), function(c) {
-                var childMethod = c.isDraggedWithGhost() ? c.updateGhostPosition : c.moveActivity;
+                var childMethod = c.isDraggedWithGhost() ? c.__updateGhostPosition : c.moveActivity;
                 childMethod.apply(c, [newPosition]);
             });
         },
@@ -979,9 +949,9 @@ define([
             });
         },
 
-        setGhostPosition: function (newGhostPosition) {
-            var effectivePosition = newGhostPosition || this.ghostPosition;
-            this.ghostEntity && helpers.applyTranslation(this.ghostEntity, effectivePosition);
+        __setGhostPosition: function (newGhostPosition) {
+            var effectivePosition = newGhostPosition || this.__ghostPosition;
+            this.__ghostEntity && helpers.applyTranslation(this.__ghostEntity, effectivePosition);
         },
 
         setSelectBorderPosition: function (position) {
@@ -1079,10 +1049,8 @@ define([
         },
 
         getLayout: function () {
-            var self = this;
-
             return {
-                'id': self.model.attributes.id
+                'id': this.getId()
             };
         },
 
@@ -1099,7 +1067,7 @@ define([
 
             _.each(connectors, function (connectorCfg) {
                 connectorCfg.parent = this;
-                this.appendConnectorNode(connectorCfg);
+                this.__appendConnectorNode(connectorCfg);
             }.bind(this));
         },
 
@@ -1107,30 +1075,30 @@ define([
             return -1;
         },
 
-        syncConnectorNodes: function() {
+        __syncConnectorNodes: function() {
             var self = this;
 
             var updatedConnectors = this.getConnectors();
             _.each(updatedConnectors, function(c) {
                 var old = _.find(this.connectors, { index: c.index });
                 _.extend(old, c);
-                this.syncConnectorNode(old);
+                this.__syncConnectorNode(old);
             }.bind(this));
 
-            this.appendTemplateConnectors();
+            this.__appendTemplateConnectors();
         },
 
-        syncConnectorNode: function(connectorCfg) {
+        __syncConnectorNode: function(connectorCfg) {
             var effectiveNode = this.getD3ConnectorNodesByIndex(connectorCfg.index);
 
             if (effectiveNode)
                 effectiveNode.attr({ 'cx' : connectorCfg.x, 'cy': connectorCfg.y })
                     .property('model', connectorCfg);
 
-            else this.appendConnectorNode(connectorCfg);
+            else this.__appendConnectorNode(connectorCfg);
         },
 
-        appendConnectorNode: function (connectorCfg) {
+        __appendConnectorNode: function (connectorCfg) {
             var model = this.model.attributes;
 
             var displayNode =
@@ -1192,11 +1160,11 @@ define([
             this.appendConnectorsNodes();
             this.appendResizers();
             this.appendTitle();
+            this.__updateControlNodes();
         },
 
         __appendOverlayNodes: function() {
             this.appendSelectBorder();
-            this.appendInfoBtn();
         },
 
         render: function () {
@@ -1211,17 +1179,17 @@ define([
             if (this.isInvalid)
                 this.invalidate();
 
-            this.bindEvents();
+            this.__bindEvents();
 
             this.onShow();
         },
 
-        appendTemplateConnectors: function() {
+        __appendTemplateConnectors: function() {
             var templateConnectors = [];
             var self = this;
             this.activityG.selectAll('.js-diagram-connector').each(function() {
                 var selector = d3.select(this);
-                var local = self.getGaugePosition(this);
+                var local = self.__getGaugePosition(this);
                 var cfg = {
                     x: local.x + +selector.attr("cx"),
                     y: local.y + +selector.attr("cy"),
@@ -1242,10 +1210,10 @@ define([
         },
 
         onShow: function() {
-            this.appendTemplateConnectors();
+            this.__appendTemplateConnectors();
         },
 
-        getGaugePosition: function(node) {
+        __getGaugePosition: function(node) {
             var ctm = this.activityG.node().getScreenCTM();
             var nodeCTM = node.parentNode.getScreenCTM();
             var p1 = this.parent.gaugePoint.matrixTransform(nodeCTM);
@@ -1336,7 +1304,7 @@ define([
                 return;
 
             this.activityG.html(this.handlebarTemplate(this.getTemplateHelpers()));
-            this.appendTemplatedGhost();
+            this.__appendTemplatedGhost();
             this.__appendServiceNodes();
         },
 
@@ -1356,21 +1324,12 @@ define([
                     'cx': connector.x,
                     'cy': connector.y
                 });
-
-                //if (d3x.node() == 'circle')
-                //    d3x.attr({
-                //        'cx': connector.x,
-                //        'cy': connector.y
-                //    });
-                //else if (d3x.node() == 'g')
-                //    d3x.attr(helpers.getTranslationAttribute(connector));
-                //
             })
         },
 
         clear: function () {
             this.rootNode.remove();
-            this.ghostEntity && this.ghostEntity.remove();
+            this.__ghostEntity && this.__ghostEntity.remove();
             this.futureRect && this.futureRect.remove();
             this.selectBorder && this.selectBorder.remove();
         },
@@ -1387,24 +1346,24 @@ define([
             return false;
         },
 
-        appendTemplatedGhost: function() {
-            if (this.ghostEntity)
-                this.ghostEntity.remove();
+        __appendTemplatedGhost: function() {
+            if (this.__ghostEntity)
+                this.__ghostEntity.remove();
 
-            this.ghostEntity = this.ghostG.append("g").attr({ opacity: 0.2 })
+            this.__ghostEntity = this.ghostG.append("g").attr({ opacity: 0.2 })
                 .style({
-                    'display': this.ghostPosition ? 'block' : 'none'
+                    'display': this.__ghostPosition ? 'block' : 'none'
                 });
 
-            this.ghostPosition && this.setGhostPosition();
-            this.ghostEntity.html(this.handlebarTemplate(this.getTemplateHelpers()));
-            this.ghostPosition && this.setGhostPosition();
+            this.__ghostPosition && this.__setGhostPosition();
+            this.__ghostEntity.html(this.handlebarTemplate(this.getTemplateHelpers()));
+            this.__ghostPosition && this.__setGhostPosition();
         },
 
         appendGhost: function () {
             var size = this.getDimensions();
 
-            this.ghostEntity = this.ghostG.append('rect')
+            this.__ghostEntity = this.ghostG.append('rect')
                 .attr({
                     x: 0,
                     y: 0,
@@ -1417,10 +1376,10 @@ define([
                     'opacity': 0.2
                 })
                 .style({
-                    'display': this.ghostPosition ? 'block' : 'none'
+                    'display': this.__ghostPosition ? 'block' : 'none'
                 });
 
-            this.ghostPosition && this.setGhostPosition();
+            this.__ghostPosition && this.__setGhostPosition();
         },
 
         getId: function () {
@@ -1463,128 +1422,10 @@ define([
             node.parentNode.appendChild(node);
         },
 
-        getInfoBtnPosition: function () {
-            return {x: 0, y: 0};
-        },
-
         getClientPosition: function (localPosition) {
             var position = this.getPosition();
             if (localPosition) position = helpers.sumPoints(position, localPosition);
             return this.parent.containerToClientXY(position);
-        },
-
-        infoBtnOnmouseover: function () {
-            this.infoBtn.hoverCircle
-                .style({'opacity': 1});
-
-            this.infoBtn.btnPoints.selectAll('*')
-                .attr({'fill': '#FFF'});
-        },
-
-        infoBtnOnclick: function () {
-            this.parent.activityInfoClicked(this);
-        },
-
-        infoBtnOnmouseout: function () {
-            if (this.infoBtn.isActive)
-                return;
-
-            this.infoBtn.hoverCircle
-                .style({'opacity': 0});
-
-            this.infoBtn.btnPoints.selectAll('*')
-                .attr({'fill': '#3e94cc'});
-        },
-
-        showInfoBtn: function () {
-            this.infoBtn.attr(helpers.getTranslationAttribute(this.getInfoBtnPosition()));
-            this.infoBtn.style({'opacity': 1});
-        },
-
-        hideInfoBtn: function () {
-            this.infoBtn && this.infoBtn.selectAll('*').attr({'opacity': 0});
-        },
-
-        appendInfoBtn: function () {
-            if (!this.isNeedInfoBtn)
-                return;
-
-            var pos = this.getInfoBtnPosition();
-
-            this.infoBtn = this.nodeOverlayG.append('g')
-                .attr(helpers.getTranslationAttribute(pos))
-                .style({'display': 'none'})
-                .classed('activity-info-btn', true)
-                .on('mouseover', this.infoBtnOnmouseover.bind(this))
-                .on('mouseout', this.infoBtnOnmouseout.bind(this));
-
-            var pointAttrs = {
-                width: 2,
-                height: 2,
-                fill: '#3e94cc'
-            };
-
-            this.infoBtn.hoverCircle = this.infoBtn.append('circle')
-                .attr({
-                    cx: 1,
-                    cy:  4,
-                    r: 8,
-                    fill: '#3e94cc',
-                    opacity: 0
-                });
-
-            this.infoBtn.btnPoints = this.infoBtn.append('g').classed('activity-info-btn-points', true);
-
-            for (var i = 0; i < 3; i++) {
-                this.infoBtn.btnPoints.append('rect')
-                    .attr(pointAttrs)
-                    .attr({
-                        x: 0,
-                        y: 3 * i
-                    });
-            }
-        },
-
-        showInfoBtnUser: function() {
-            if (!this.infoBtn)
-                return;
-
-            clearTimeout(this.activityInfiBtnTimer);
-            this.infoBtn.style({'display': 'block'});
-            this.showInfoBtn();
-        },
-
-        hideInfoBtnUser: function(timeout) {
-            if (!this.infoBtn)
-                return;
-
-            var delayedHide = function () {
-                if (this.parent.activityInfo.isShowingActivity(this.getId()))
-                {
-                    this.activityInfiBtnTimer = setTimeout(delayedHide, timeout || 500);
-                    return;
-                }
-                this.infoBtn.style({'display': 'none'});
-            }.bind(this);
-
-            this.activityInfiBtnTimer = setTimeout(delayedHide, timeout || 500);
-        },
-
-        onActivityInfoBtnMouseenter: function () {
-            this.parent.givenActivityInfoAvailable(this, this.showInfoBtnUser.bind(this));
-        },
-
-        onActivityInfoBtnMouseleave: function () {
-            this.hideInfoBtnUser();
-        },
-
-        bindHoverEvents: function () {
-            if (this.infoBtn && this.isNeedInfoBtn ) {
-                this.parent.givenActivityInfoAvailable(this, function() {
-                    this.rootNode.on('mouseenter', this.onActivityInfoBtnMouseenter.bind(this));
-                    this.rootNode.on('mouseleave', this.onActivityInfoBtnMouseleave.bind(this));
-                }.bind(this));
-            }
         },
 
         getTitleLayout: function () {
@@ -1796,7 +1637,7 @@ define([
 
         getPlacedDraggedPosition: function () {
             var dimensions = this.getDimensions();
-            return this.isDraggedWithGhost() ? this.ghostPosition : this.getPosition();
+            return this.isDraggedWithGhost() ? this.__ghostPosition : this.getPosition();
         },
 
         cancelDrag: function() {

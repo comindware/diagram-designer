@@ -7,6 +7,8 @@ define([
 
     return Marionette.Object.extend({
 
+        id: 'rolling-subactivity-set',
+
         apply: function(activity) {
             activity.appendSubActivities = this.appendSubActivities.bind(activity);
             activity.getSubActivityNewPosition = this.getSubActivityNewPosition.bind(activity);
