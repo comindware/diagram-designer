@@ -31,8 +31,8 @@ function(
         behavior.setup = function(activity) {
             var restArguments = _.without(arguments, activity);
             var bind = behavior.bind.apply(this, arguments);
-            var behaviorInstance = new bind();
-            behaviorInstance.apply(activity);
+            var behaviorInstance = new bind(restArguments);
+            behaviorInstance.apply.apply(behaviorInstance, arguments);
             activity[behaviorKey] = behaviorInstance;
             return behaviorInstance;
         };

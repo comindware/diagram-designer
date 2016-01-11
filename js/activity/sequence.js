@@ -8,23 +8,29 @@ function (helpers) {
             this.container = cfg.container;
             this.items = cfg.items || [];
             this.layoutFunc = cfg.layoutFunc || this.layoutFuncDefault;
-            this.position = cfg.position;
+
+            if (cfg.position)
+                this.position = cfg.position;
         },
 
         render: function () {
             if (this.rootNode)
                 this.rootNode.remove();
 
-            this.rootNode = this.container.append('g')
-                .attr('transform', 'translate(' + this.position.x + ',' + this.position.y + ')')
-                .style({'display': 'none'})
+            if (!this.drawingContainer)
+                this.drawingContainer = _.result(this, "container");
+
+            var position = _.result(this, "position");
+
+            this.rootNode = helpers.appendTranslatedGroup(this.drawingContainer, position)
                 .classed({
                     'subActivities': true,
                     'when-selected': true
                 });
             _.each(this.items, function (item) {
+                item.container = this.rootNode;
                 item.render();
-            });
+            }.bind(this));
         },
 
         addItem: function (item) {
@@ -51,8 +57,9 @@ function (helpers) {
 
     ActivitySequence.create = function(options, items) {
         var effectiveItems = _.map(items, function(item) {
-            return ActivitySequence.BaseSequenceMember.extend(item);
-        })
+            var extender = ActivitySequence.BaseSequenceMember.extend(item);
+            return new extender(item);
+        });
 
         var sequence = new ActivitySequence(_.extend(options, { items: effectiveItems }));
 
@@ -68,6 +75,9 @@ function (helpers) {
                 _.extend(options, { sequence: sequence });
                 sequence.trigger("element:click", options);
             });
+
+            if (!item.type)
+                item.type = options.type;
         });
 
         return sequence;
@@ -93,6 +103,7 @@ function (helpers) {
                 {
                     clientX: event.clientX,
                     clientY: event.clientY,
+                    originalEvent: event,
                     source: this
                 }
             );
@@ -148,18 +159,20 @@ function (helpers) {
 
         initialize: function(options) {
             _.extend(this, options);
-            if (!this.x0)
+            if (!this.x)
                 this.x = 0;
             if (!this.y)
                 this.y = 0;
+
+            this.options = options;
         },
 
         getHelper: function() {
-            return this.toJSON()
+            return JSON.stringify(this.options || {});
         },
 
         getPosition: function() {
-            return { x: this.options.x + 3, y: this.options.y };
+            return { x: this.x + 3, y: this.y };
         },
 
         getScale: function() {
@@ -168,7 +181,9 @@ function (helpers) {
 
         render: function () {
 
-            this.backElement = helpers.appendTranslatedGroup(this.parent.rootNode, { x: this.options.x, y: this.options.y });
+            var position = this.getPosition();
+
+            this.backElement = helpers.appendTranslatedGroup(this.container, position);
             this.backElement.append("rect").attr({
                 width: this.backWidth,
                 height: this.backHeight,
@@ -180,16 +195,12 @@ function (helpers) {
             })
                 .classed( { "rect-hover": true });
 
-            var diff = helpers.substractPoint(this.getPosition(), { x: this.options.x, y: this.options.y });
-
-            this.contentElement = helpers.appendTranslatedGroup(this.backElement, diff);
+            this.contentElement = helpers.appendTranslatedGroup(this.backElement, { x: 0, y: 0 });
             this.contentElement.attr({ "transform": this.contentElement.attr("transform") + " scale(" + this.getScale() + ")" });
             this.contentElement.html(this.tpl(this.getHelper()));
 
 
             this.backElement
-                .property('type', self.type)
-                .property('kind', self.kind)
                 .on('mousedown', ActivitySequence.mousedown.bind(this))
                 .on('mouseclick', ActivitySequence.mouseclick.bind(this))
 
