@@ -33,7 +33,7 @@ function(
         titled: Titled,
         setupDeclarative: function(activity) {
             var args = _.rest(arguments, 1);
-            behaviors = _.map(this, function(behavior) {
+            _.each(this, function(behavior) {
                 if (behavior.prototype.id && _.indexOf(args, behavior.prototype.id) >= 0)
                     behavior.setup(activity);
             })
