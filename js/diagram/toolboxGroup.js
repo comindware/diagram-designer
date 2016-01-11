@@ -1,4 +1,4 @@
-define(['d3utils', 'd3'],
+define(['../utils/d3utils'],
 
 function (helpers)
 {
@@ -34,7 +34,7 @@ function (helpers)
             this.views = [];
             _.each(this.elements, function(element) {
                 var cfg = _.extend(element, {
-                    container: this.container
+                    container: this.elementsContainer
                 });
 
                 var viewConstructor = element.view;
@@ -84,10 +84,10 @@ function (helpers)
                 .text(this.title);
 
             // trash bin for group elements
-            this.container = this.rootContainer.append("g").attr(
+            this.elementsContainer = this.rootContainer.append("g").attr(
                 helpers.getTranslationAttribute({ x: 0, y: this.titleHeight }));
 
-            this.childrenBorderElement = this.container
+            this.childrenBorderElement = this.elementsContainer
                 .append("rect")
                 .attr({
                     x: 0,

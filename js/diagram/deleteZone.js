@@ -1,4 +1,4 @@
-define(['d3utils'],
+define(['../utils/d3utils'],
 
 function (helpers) {
 

@@ -20,7 +20,10 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "test-main.js",
+    "build.js",
+    "karma.conf.js"
   ],
   "dependencies": {
     "handlebars": "~4.0.5",

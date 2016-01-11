@@ -13,7 +13,7 @@ Object.keys(window.__karma__.files).forEach(function(file) {
 });
 
 var initTest = function() {
-  require(["handlebars"], function(handlebars) {
+  require(["handlebars", "d3"], function(handlebars) {
       window.Handlebars = handlebars;
       require(["backbone", "marionette"], function() {
         require(allTestFiles, function() {
@@ -30,7 +30,6 @@ require.config({
 
   paths: {
     'd3': 'bower_components/d3/d3',
-    'd3utils': 'js/helpers/d3utils',
     'jquery': 'bower_components/jquery/dist/jquery',
     'handlebars': 'bower_components/handlebars/handlebars',
     'backbone': 'bower_components/backbone/backbone',
