@@ -1,8 +1,7 @@
 define([
-    'd3utils',
+    '../utils/d3utils',
     './activity',
-    './../utils/aStarSearch',
-    'd3'
+    './../utils/aStarSearch'
 ],
 
 function (helpers, ActivityViewModel, astar) {

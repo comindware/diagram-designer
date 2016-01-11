@@ -1,13 +1,12 @@
 define([
-    'd3utils',
+    '../utils/d3utils',
     '../activity/activity',
     './toolbox',
     './selectFrame',
     './modelMapper',
     '../utils/UndoRedoHelper',
     '../utils/ClipboardHelper',
-    './deleteZone',
-    'd3'
+    './deleteZone'
 
 ], function (helpers,
              Activity,

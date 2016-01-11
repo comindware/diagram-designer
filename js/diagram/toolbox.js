@@ -1,4 +1,4 @@
-define(['d3utils', './toolboxGroup'],
+define(['../utils/d3utils', './toolboxGroup'],
 
     function (helpers, ElementGroupView) {
 

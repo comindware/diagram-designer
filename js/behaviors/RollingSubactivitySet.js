@@ -1,5 +1,5 @@
 define([
-    'd3utils',
+    '../utils/d3utils',
     '../activity/subActivity'
 ], function(helpers, SubactivityView) {
 

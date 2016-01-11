@@ -1,9 +1,6 @@
 define([
     './subActivity',
-    'd3utils',
-    'd3',
-    'handlebars',
-    'marionette'
+    '../utils/d3utils'
 ], function (SubactivityView, helpers) {
     'use strict';
     var titleAreaTemplate = "<div></div>";

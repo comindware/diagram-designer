@@ -1,6 +1,5 @@
 define([
-    'd3utils',
-    'd3'
+    '../utils/d3utils'
 ], function (helpers) {
     'use strict';
 

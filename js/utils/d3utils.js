@@ -1,4 +1,4 @@
-define(['d3'],  function (d3) {
+define([],  function () {
     'use strict';
 
     d3.selection.prototype.bringToFront = function() {

@@ -1,6 +1,6 @@
-define(['d3utils', 'd3'],
+define(['../utils/d3utils'],
 
-function (helpers, d3) {
+function (helpers) {
     'use strict';
 
     var SubActivitiesViewModel = Marionette.Object.extend({
