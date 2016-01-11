@@ -38,7 +38,8 @@
             }
         });
 
-        require(["handlebars", "d3"], function(handlebars) {
+        require(["handlebars", "d3"], function(handlebars, d3) {
+            window.d3 = d3;
             window.Handlebars = handlebars;
             require(["backbone", "marionette"], function() {
                 require(['demo/app'], function(app) {
