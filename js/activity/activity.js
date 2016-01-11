@@ -863,6 +863,14 @@ define([
 
         updateLinkedPermanent: function () {
             this.addPermanentLink(this.tempLinked.source, this.tempLinked.target);
+            if (this.virtualPosition) {
+                this.setModelPosition(this.virtualPosition);
+                delete this.virtualPosition;
+            }
+            if (this.tempLinked.source.parent.virtualPosition) {
+                this.tempLinked.source.parent.setModelPosition(this.tempLinked.source.parent.virtualPosition);
+                delete this.tempLinked.source.parent.virtualPosition;
+            }
         },
 
         addPermanentLink: function (source, target) {
@@ -927,14 +935,17 @@ define([
 
         setVirtualPosition: function (sourceCon, targetCon) {
             var distance = helpers.getDistance(targetCon.x0, targetCon.y0, sourceCon.x0, sourceCon.y0);
-            if (distance < helpers.LinkedDistance)
+            if (distance < helpers.LinkedDistance) {
+                this.virtualPosition = {
+                    x: targetCon.x0 - sourceCon.x,
+                    y: targetCon.y0 - sourceCon.y
+                };
+
                 this.setDrawingPosition(
-                    {
-                        x: targetCon.x0 - sourceCon.x,
-                        y: targetCon.y0 - sourceCon.y
-                    },
+                    this.virtualPosition,
                     sourceCon,
                     targetCon);
+            }
         },
 
         setDrawingPosition: function(position) {
