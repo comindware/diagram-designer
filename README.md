@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/comindware/diagram-designer.svg)](https://travis-ci.org/comindware/diagram-designer)
 # diagram-designer-core
 
 Core library for editing activities and their connections with each other to form general diagram
