@@ -84,7 +84,7 @@ define(["js/activity/activity", './renderHelpers', 'js/activity/sequence'], func
             activity.render();
 
             // 2 - activity itself & standard resize points set
-            expect($("svg g.js-activity-resize-root").length).toBe(2);
+            expect($("svg g.js-activity-resize-root").length).toBe(1);
         });
 
         it("generates view when rendered", function() {

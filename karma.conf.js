@@ -15,10 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'bower_components/underscore/underscore.js',
-//      'bower_components/handlebars/handlebars.js',
-//      'bower_components/backbone/backbone.js',
-//      'bower_components/backbone.marionette/lib/backbone.marionette.js',
+      './node_modules/phantomjs-polyfill/bind-polyfill.js',
 
       'test-main.js',
       {pattern: 'js/**/*.js', included: false},
