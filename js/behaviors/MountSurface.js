@@ -4,6 +4,8 @@ define(['../utils/d3utils'], function(helpers) {
 
     return Marionette.Object.extend({
 
+        id: 'mount-surface',
+
         apply: function(activity) {
             activity.on('dragOver', this.dragOver.bind(activity));
             activity.on('finishDragOver', this.finishDragOver.bind(activity));

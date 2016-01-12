@@ -13,16 +13,13 @@ var compiler = webpack(
         },
         resolve: {
             root: [
-                __dirname + '/js',
+                __dirname + '/js'
             ]
         }
     }
 );
 
-compiler.watch({
-    aggregateTimeout: 300,
-    poll: true
-}, function(err, stats) {
+compiler.run(function(err, stats) {
     if (err)
         console.log(err);
     else {

@@ -4,6 +4,8 @@ define(['../utils/d3utils'], function(helpers) {
 
     return Marionette.Object.extend({
 
+        id: 'rectangular-resizers',
+
         apply: function(activity) {
             activity.appendResizers = this.appendResizers.bind(activity);
         },

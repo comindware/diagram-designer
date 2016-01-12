@@ -13,7 +13,7 @@ Object.keys(window.__karma__.files).forEach(function(file) {
 });
 
 var initTest = function() {
-  require(["handlebars", "d3"], function(handlebars) {
+  require(["handlebars", "d3", "jquery", "underscore"], function(handlebars) {
       window.Handlebars = handlebars;
       require(["backbone", "marionette"], function() {
         require(allTestFiles, function() {
@@ -58,3 +58,4 @@ require.config({
   // we have to kickoff jasmine, as it is asynchronous
   callback: initTest
 });
+

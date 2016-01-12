@@ -5,6 +5,8 @@ define([], function() {
 
     return Marionette.Object.extend({
 
+        id: 'rectangular-shaped-connector-set',
+
         apply: function(activity) {
             activity.getConnectors = this.getConnectors.bind(activity);
         },
