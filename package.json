@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "karma start --browsers PhantomJS",
+    "test": "karma start --browsers PhantomJS --single-run",
     "build": "node build.js"
   },
   "keywords": [
