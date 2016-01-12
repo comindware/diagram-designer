@@ -15,10 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'bower_components/underscore/underscore.js',
-//      'bower_components/handlebars/handlebars.js',
-//      'bower_components/backbone/backbone.js',
-//      'bower_components/backbone.marionette/lib/backbone.marionette.js',
+      './node_modules/phantomjs-polyfill/bind-polyfill.js',
 
       'test-main.js',
       {pattern: 'js/**/*.js', included: false},
@@ -30,6 +27,8 @@ module.exports = function(config) {
     // list of files to exclude
     exclude: [
     ],
+
+    debug: false,
 
 
     // preprocess matching files before serving them to the browser
@@ -63,7 +62,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ["Chrome"],
 
 
     // Continuous Integration mode
@@ -72,6 +71,26 @@ module.exports = function(config) {
 
     // Concurrency level
     // how many browser should be started simultanous
-    concurrency: Infinity
+    concurrency: Infinity,
+
+    customLaunchers: {
+      'PhantomJS_custom': {
+        base: 'PhantomJS',
+        options: {
+          windowName: 'my-window',
+          settings: {
+            webSecurityEnabled: false
+          },
+        },
+        flags: ['--load-images=true'],
+        debug: true
+      }
+    },
+
+    phantomjsLauncher: {
+      // Have phantomjs exit if a ResourceError is encountered (useful if karma exits without killing phantom)
+      exitOnResourceError: true
+    }
+
   })
 }

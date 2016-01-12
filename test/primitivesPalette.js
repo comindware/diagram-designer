@@ -101,25 +101,25 @@ define(['js/diagram/primitivesPalette', 'js/diagram/diagram', './renderHelpers']
 
         });
 
-        it("renders circle element in the toolbox as a part of primitives", function() {
-            var diagram = getRenderedDiagram();
-
-            var palette = new PrimitivesPalette();
-            palette.install(diagram);
-
-            expect($("g#primitivesGroup circle.js-toolbox").length).toBe(1);
-        });
-
-        it("renders rectangle element in the toolbox as a part of primitives", function() {
-
-            var diagram = getRenderedDiagram();
-
-            var palette = new PrimitivesPalette();
-            palette.install(diagram);
-
-            expect($("g#primitivesGroup rect.js-toolbox").length).toBe(1);
-
-        })
+        //it("renders circle element in the toolbox as a part of primitives", function() {
+        //    var diagram = getRenderedDiagram();
+        //
+        //    var palette = new PrimitivesPalette();
+        //    palette.install(diagram);
+        //
+        //    expect($("g#primitivesGroup circle.js-toolbox").length).toBe(1);
+        //});
+        //
+        //it("renders rectangle element in the toolbox as a part of primitives", function() {
+        //
+        //    var diagram = getRenderedDiagram();
+        //
+        //    var palette = new PrimitivesPalette();
+        //    palette.install(diagram);
+        //
+        //    expect($("g#primitivesGroup rect.js-toolbox").length).toBe(1);
+        //
+        //})
     });
 
 });

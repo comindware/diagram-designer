@@ -1,11 +1,13 @@
 define([
     '../utils/d3utils',
-    '../activity/subActivity'
+    '../activity/sequence'
 ], function(helpers, SubactivityView) {
 
     'use strict';
 
     return Marionette.Object.extend({
+
+        id: 'rolling-subactivity-set',
 
         apply: function(activity) {
             activity.appendSubActivities = this.appendSubActivities.bind(activity);

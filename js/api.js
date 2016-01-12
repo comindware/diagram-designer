@@ -5,7 +5,7 @@
 define([
     "activity/activity",
     "activity/flow",
-    "activity/subActivity",
+    "activity/sequence",
     "behaviors/api",
     "diagram/diagram",
     "diagram/primitivesPalette",
@@ -13,14 +13,14 @@ define([
     "diagram/toolboxElement"
 ],
 
-function(activity, flow, subActivity, behaviors, diagram, primitivesPalette, toolboxGroup, toolboxElement) {
+function(activity, flow, sequence, behaviors, diagram, primitivesPalette, toolboxGroup, toolboxElement) {
 
     return {
 
         activities: {
             Activity: activity,
             Flow: flow,
-            SubActivity: subActivity
+            Sequence: sequence
         },
 
         Diagram: diagram,
