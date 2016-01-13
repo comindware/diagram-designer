@@ -716,7 +716,7 @@ define([
             this.$el.unbind('mousemove');
             this.$el.unbind('mouseup');
 
-            this.resizedActivity.onfinishResize();
+            this.resizedActivity.finishResize();
 
             this.currentCommand && this.currentCommand.captureNewState([this.resizedActivity]);
 

@@ -79,7 +79,6 @@ define([
         __doBeforeActivityResize: function(size) {
             this.beforeActivityResize();
             this.trigger("before:resize", size);
-
         },
 
         __doBeforeUpdateSize: function(size) {
@@ -87,9 +86,9 @@ define([
             this.trigger("before:updateSize", size);
         },
 
-        __doFinishResize: function() {
-            this.onfinishResize();
-            this.trigger("finish:resize");
+        __doAfterResize: function(options) {
+            this.__afterResize(options);
+            this.trigger("after:resize");
         },
 
         __doStartDrag: function() {
@@ -139,7 +138,7 @@ define([
             this.__applyGhostSize();
         },
 
-        afterResize: function(e) {
+        __afterResize: function(e) {
 
         },
 
@@ -167,7 +166,7 @@ define([
             return helpers.getTransformedPoint(parentPosition, this.getPosition(), [-1, -1]);
         },
 
-        onfinishResize: function () {
+        finishResize: function () {
             if (this.__ghostEntity) {
                 this.setEffectiveRect(
                     {
@@ -191,14 +190,6 @@ define([
 
             this.resizeChildNodes(dWidth, dHeight);
 
-            this.afterResize({
-                deltaDimensions: {
-                    width: dWidth,
-                    height: dHeight
-                },
-                deltaPosition: helpers.substractPoint(this.getPosition(), this.dragStartPosition)
-            });
-
             this.owner && this.owner.trigger('childFinishResize', {child: this, dHeight: dHeight, dWidth: dWidth});
             delete this.startHeight;
             delete this.startWidth;
@@ -207,6 +198,16 @@ define([
             this.selected && this.select();
             this.__updateControlNodes();
             this.updateFlow();
+
+            this.__doAfterResize({
+                deltaDimensions: {
+                    width: dWidth,
+                    height: dHeight
+                },
+                deltaPosition: helpers.substractPoint(this.getPosition(), this.dragStartPosition)
+            });
+
+
         },
 
         resizeChildNodes: function () {
@@ -1208,6 +1209,7 @@ define([
         },
 
         onShow: function() {
+            this.__syncScalableComponents();
             this.__appendTemplateConnectors();
         },
 
