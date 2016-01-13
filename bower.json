@@ -1,7 +1,7 @@
 {
   "name": "diagram-designer-core",
   "description": "core objects to edit collection of activities",
-  "main": 'lib/diagram-designer-core.js',
+  "main": "lib/diagram-designer-core.js",
   "authors": [
     "Nikolay Volf",
     "Grigory Kuznetsov"
