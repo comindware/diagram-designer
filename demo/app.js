@@ -5,16 +5,6 @@
 define(['designer'], function(designer) {
 
     var demoApp = {
-
-        setupContainer: function() {
-            this.container = document.createElement("div");
-            this.container.setAttribute("class", testSettings.graphContainerClass);
-            document.body.appendChild(this.container);
-
-            this.htmlSelect = $(this.container);
-        },
-
-
         showDemo1: function() {
             this.diagram = new designer.Diagram();
             this.diagram.render();
