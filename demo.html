@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Diagram Designer Demo</title>
+
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Diagram-designer by comindware</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+
+    <script type="text/javascript" src="../bower_components/requirejs/require.js"></script>
+
+    <script type="text/javascript">
+
+        require.config({
+            baseUrl: '/comindware/diagram-designer/trash/githubDemo/',
+            paths: {
+                'd3': 'bower_components/d3/d3',
+                'jquery': 'bower_components/jquery/dist/jquery',
+                'handlebars': 'bower_components/handlebars/handlebars',
+                'backbone': 'bower_components/backbone/backbone',
+                'marionette': 'bower_components/backbone.marionette/lib/backbone.marionette',
+                'underscore': 'bower_components/underscore/underscore',
+                'designer': 'bower_components/diagram-designer-core/lib/diagram-designer-core'
+            },
+
+            shim: {
+                'backbone': {
+                    deps: ['jquery', 'underscore'],
+                    exports: 'Backbone'
+                },
+                'underscore': {
+                    exports: '_'
+                },
+                'marionette': {
+                    deps: ['backbone'],
+                    exports: 'Marionette'
+                },
+                'd3': {
+                    exports: 'd3'
+                }
+            }
+        });
+
+        require(["handlebars", "d3"], function(handlebars, d3) {
+            window.d3 = d3;
+            window.Handlebars = handlebars;
+            require(["backbone", "marionette"], function() {
+                require(['demo/app'], function(app) {
+                    app.start()
+                });
+            });
+
+        });
+
+    </script>
+
+    <link href="diagram.css" rel="stylesheet" />
+
+</head>
+
+<body>
+<div class="wrapper js-graphContainer">
+
+</div>
+
+<script src="javascripts/scale.fix.js"></script>
+
+
+</html>
