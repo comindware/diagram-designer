@@ -48,11 +48,13 @@ define(['./UndoRedoHelper'], function(UndoRedoHelper) {
                 });
             });
 
+            _.invoke(pasted, "render");
             self.diagram.deselectAll();
             _.invoke(pasted, "select", true);
             self.diagram.selected = _.reject(pasted, function(x) { return x.isOfMetaType("Flow") });
             if (self.diagram.selected.length == 0)
                 self.diagram.selected = _.first(pasted);
+
 
             self.diagram.finalizeNewOrUpdateCommand(pasted);
         };

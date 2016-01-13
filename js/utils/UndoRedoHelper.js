@@ -66,8 +66,7 @@ define([], function () {
         diagram.collection.add(model);
 
         var restoredViewModel = diagram.createViewByModel(model, diagram);
-        diagram.viewModels.push(restoredViewModel);
-        diagram.viewModelsHash[restoredViewModel.getId()] = restoredViewModel;
+        diagram.__pushViewModel(restoredViewModel);
 
         return restoredViewModel;
     };

@@ -59,6 +59,14 @@ define([
         this.remove = function(model) {
             this.models.slice(_.indexOf(model), 1);
         }
+
+        this.model = function(attributes) {
+            return new Activity.SelfHostedModel(attributes);
+        }
+
+        this.saveModel = function(model) {
+
+        }
     };
 
     return Marionette.Object.extend({
@@ -204,7 +212,7 @@ define([
 
             this.foreachViewModels(function (viewModel) {
                 if (options.sourceActivity != viewModel)
-                    viewModel.hideSubActivities();
+                    viewModel.hideControlElements();
             });
 
         },
@@ -1238,8 +1246,10 @@ define([
             this.defaultPool && this.defaultPool.captureOriginalState();
         },
 
-        createViewByModel: function() {
-            ModelMapper.createViewByModel.bind(ModelMapper)
+        createViewByModel: function(model) {
+            var viewConstructor = this.modelMapper.matchModel(model);
+            return new viewConstructor ({ model: model, parent: this, isHidden: true });
+
         },
 
         addTempViewModel: function (model) {

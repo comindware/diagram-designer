@@ -788,6 +788,10 @@ define([
         __hideControlElements: function() {
         },
 
+        hideControlElements: function(){
+            this.__hideControlElements();
+        },
+
         resizerMouseDown: function (e) {
             e = $.extend(e, { sourceActivity: this });
             this.parent.trigger('activityResize', e);
@@ -1167,6 +1171,8 @@ define([
         },
 
         render: function () {
+            this.isHidden = false;
+
             var node = this.generateView();
             this.__updateContainer();
             this.parentContainer.select(function () {

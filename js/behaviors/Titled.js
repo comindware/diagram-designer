@@ -13,8 +13,9 @@ define(['../utils/d3utils'], function(helpers) {
         apply: function(activity, layout) {
             activity.__titleLayout = _.isFunction(layout) ? layout.bind(activity) : layout;
             _.wrapThrough(activity, "__bindEvents", this.__bindEvents);
-            _.wrapThrough(activity, "__appendServiceNodes", this.__appendServiceNodes);
+//            _.wrapThrough(activity, "__appendServiceNodes", this.__appendServiceNodes);
             _.wrapThrough(activity, "__doAfterResize", this.__doAfterResize);
+            _.wrapThrough(activity, "onShow", this.onShow);
 
             _.bindAllTo(activity, this,
                 "__getTitleLayout",
@@ -41,7 +42,7 @@ define(['../utils/d3utils'], function(helpers) {
             return modelTitle;
         },
 
-        __appendServiceNodes: function() {
+        onShow: function() {
             this.__appendTitle();
         },
 
@@ -84,7 +85,7 @@ define(['../utils/d3utils'], function(helpers) {
             layout = layout || this.__getTitleLayout();
             text = text || this.getDisplayTitle();
 
-            var textClasses = { 'activity-shape' : true, 'no-select': true, 'activity-title': true };
+            var textClasses = { 'js-activity-shape' : true, 'no-select': true, 'activity-title': true };
             var words = text.split(' ');
             var tspan_element = this.titleNode
                 .append("tspan")
@@ -139,7 +140,7 @@ define(['../utils/d3utils'], function(helpers) {
                 .attr("y", titleLayout.y + titleLayout.lineHeight)
                 .attr("width", titleLayout.width)
                 .attr("height", titleLayout.height)
-                .classed({ "activity-shape" : true });
+                .classed({ "js-activity-shape" : true });
 
             this.__createMultiline(title, titleLayout);
 
@@ -252,7 +253,7 @@ define(['../utils/d3utils'], function(helpers) {
             width: size.width - 20,
             height: 60,
             isMandatory: false,
-            isVerticalCenterAligned: true,
+            isVerticalCenterAligned: false,
             isHorizontalCenterAligned: true,
             overlayEditorX: 5,
             overlayEditorY: size.height + 5,
