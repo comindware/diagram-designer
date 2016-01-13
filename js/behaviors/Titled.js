@@ -2,7 +2,7 @@ define(['../utils/d3utils'], function(helpers) {
 
     'use strict';
 
-    return Marionette.Object.extend({
+    var TitledBehavior = Marionette.Object.extend({
 
         id: 'titled',
 
@@ -11,7 +11,7 @@ define(['../utils/d3utils'], function(helpers) {
         editTemplate: Handlebars.compile(""),
 
         apply: function(activity, layout) {
-            activity.__titleLayout = layout;
+            activity.__titleLayout = _.isFunction(layout) ? layout.bind(activity) : layout;
             _.wrapThrough(activity, "__bindEvents", this.__bindEvents);
             _.wrapThrough(activity, "__appendServiceNodes", this.__appendServiceNodes);
             _.wrapThrough(activity, "__doAfterResize", this.__doAfterResize);
@@ -33,7 +33,12 @@ define(['../utils/d3utils'], function(helpers) {
         },
 
         getDisplayTitle: function() {
-            return this.getTitle() || "No title";
+            var modelTitle = this.getTitle();
+            var layout = this.__getTitleLayout();
+            if (layout.isMandatory)
+                return modelTitle || "No title";
+
+            return modelTitle;
         },
 
         __appendServiceNodes: function() {
@@ -43,13 +48,12 @@ define(['../utils/d3utils'], function(helpers) {
         __getTitleLayout: function () {
             var size = this.getDimensions();
 
-            return {
+            var defaults = {
                 exists: true,
                 x: 10,
                 y: 10,
                 width: size.width - 20,
                 height: size.height - 20,
-                textWidth: size.width - 20,
                 isMandatory: true,
                 isVerticalCenterAligned: true,
                 isHorizontalCenterAligned: true,
@@ -59,6 +63,10 @@ define(['../utils/d3utils'], function(helpers) {
                 overlayEditorHeight: size.height - 30,
                 lineHeight: 18
             }
+            if (this.__titleLayout)
+                _.extend(defaults, _.result(this, "__titleLayout"));
+
+            return defaults;
         },
 
         __bindEvents: function() {
@@ -117,8 +125,9 @@ define(['../utils/d3utils'], function(helpers) {
         __appendTitle: function () {
             var titleLayout = this.__getTitleLayout();
 
-            var textWidth = titleLayout.textWidth;
             var title = this.getDisplayTitle();
+            if (!title)
+                return;
 
             this.titleG = this.activityG.select(".js-title-content");
 
@@ -128,7 +137,7 @@ define(['../utils/d3utils'], function(helpers) {
             this.titleNode = this.titleG.append("text")
                 .attr("x", titleLayout.x)
                 .attr("y", titleLayout.y + titleLayout.lineHeight)
-                .attr("width", textWidth)
+                .attr("width", titleLayout.width)
                 .attr("height", titleLayout.height)
                 .classed({ "activity-shape" : true });
 
@@ -158,6 +167,12 @@ define(['../utils/d3utils'], function(helpers) {
             this.model.attributes.title = newTitle;
 
             this.overlayEditor.remove();
+
+            if (!this.titleG) {
+                this.__appendTitle();
+                return;
+            }
+
             this.titleG.style({ 'display' : 'block'});
             this.titleNode.selectAll("*").remove();
             this.__createMultiline(newTitle);
@@ -189,7 +204,8 @@ define(['../utils/d3utils'], function(helpers) {
 
             this.__hideControlElements();
 
-            this.titleG.style({ 'display' : 'none'});
+            if (this.titleG)
+                this.titleG.style({ 'display' : 'none'});
 
 
             this.overlayEditor = this.parent.htmlContainer
@@ -218,7 +234,7 @@ define(['../utils/d3utils'], function(helpers) {
                 })
                 .on("blur", this.__stopEditTitle);
 
-            this.overlayEditorBox.node().value =  this.getTitle() || "No title";
+            this.overlayEditorBox.node().value =  this.getDisplayTitle() || "";
 
             this.overlayEditorBox.node().focus();
 
@@ -226,6 +242,28 @@ define(['../utils/d3utils'], function(helpers) {
 
         },
     });
+
+    TitledBehavior.undersideLayoutPreset = function() {
+        var size = this.getDimensions();
+        return {
+            exists: true,
+            x: 10,
+            y: size.height + 5,
+            width: size.width - 20,
+            height: 60,
+            isMandatory: false,
+            isVerticalCenterAligned: true,
+            isHorizontalCenterAligned: true,
+            overlayEditorX: 5,
+            overlayEditorY: size.height + 5,
+            overlayEditorWidth: size.width - 15,
+            overlayEditorHeight: 60,
+            lineHeight: 18
+        }
+    };
+
+    return TitledBehavior;
+
 
 
 });

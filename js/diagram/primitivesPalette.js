@@ -28,6 +28,7 @@ function(ToolboxGroup, ToolboxElement, Activity, FlowView, ActivitySequence, beh
                 'rectangular-resizers',
                 'rectangular-shaped-connector-set');
             behaviors.subActivitySpawnSequence.setup(this, { sequence: Circle.ColorSequence() });
+            behaviors.titled.setup(this, behaviors.titled.undersideLayoutPreset);
             _.extend(cfg, {
                 template: '<g transform="{{dimScale}}" class="js-activity-resize-root diagram-activity-circle"><circle class="diagram-activity-circle js-activity-shape" cx="50" cy="50" r="50"></rect></g>'
             });
