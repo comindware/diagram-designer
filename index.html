@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Diagram-designer by comindware</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Diagram-designer</h1>
+        <p></p>
+
+        <p class="view"><a href="https://github.com/comindware/diagram-designer">View the Project on GitHub <small>comindware/diagram-designer</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/comindware/diagram-designer/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/comindware/diagram-designer/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/comindware/diagram-designer">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p><a href="https://travis-ci.org/comindware/diagram-designer"><img src="https://travis-ci.org/comindware/diagram-designer.svg" alt="Build Status"></a></p>
+
+<h1>
+<a id="diagram-designer-core" class="anchor" href="#diagram-designer-core" aria-hidden="true"><span class="octicon octicon-link"></span></a>diagram-designer-core</h1>
+
+<p>Core library for editing activities and their connections with each other to form general diagram</p>
+
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>dependencies</h2>
+
+<p>jquery, underscore, handlebars, backbone, marionette, d3 (listed in bower.json)</p>
+
+<p>all of these should be defined on the global scope</p>
+
+<p>backbone and marionette will be removed once with fallback to self-hosted models</p>
+
+<h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>requirements</h2>
+
+<p>node.js</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>usage</h2>
+
+<pre><code>bower install diagram-designer-core
+</code></pre>
+
+<pre><code>require("bower_components/diagram-designer-core/lib/diagram-designer-core", function(diagramDesignerApi) {
+  var diagram = new diagramDesignerApi.Diagram();
+  diagram.render();
+});
+</code></pre>
+
+<h2>
+<a id="tests-and-develop" class="anchor" href="#tests-and-develop" aria-hidden="true"><span class="octicon octicon-link"></span></a>tests and develop</h2>
+
+<p>library uses karma runner with jasmine described tests</p>
+
+<p>to develop and run tests</p>
+
+<pre><code>npm install
+bower install
+karma start
+</code></pre>
+
+<p>you probably want bower and karma to be installed globally before this</p>
+
+<pre><code>npm install -g karma
+npm install -g bower
+</code></pre>
+
+<h2>
+<a id="demo" class="anchor" href="#demo" aria-hidden="true"><span class="octicon octicon-link"></span></a>demo</h2>
+
+<p>simple github demo (version can be other than current master):</p>
+
+<p><a href="https://rawgit.com/comindware/diagram-designer/trash/githubDemo/demo/github.html">https://rawgit.com/comindware/diagram-designer/trash/githubDemo/demo/github.html</a></p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/comindware">comindware</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
