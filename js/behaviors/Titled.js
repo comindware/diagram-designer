@@ -184,7 +184,7 @@ define(['../utils/d3utils'], function(helpers) {
         __resizeTitleNode: function() {
             if (!this.titleNode)
                 return;
-            
+
             this.titleNode.selectAll("*").remove();
             this.__createMultiline();
             this.__alignText();
