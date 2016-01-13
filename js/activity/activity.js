@@ -570,7 +570,7 @@ define([
             node.attr(attributes);
             node.datum(this);
 
-            this.appendViewItems(node);
+            this.appendViewItems();
             this.__ghostEntity && this.__setGhostPosition(position);
 
             return node;

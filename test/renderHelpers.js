@@ -15,7 +15,7 @@ define([], function() {
                 this.svgElement.setAttribute("id", this.svgId);
                 window.document.body.appendChild(this.svgElement);
 
-                this.containerElement = document.createElement("g");
+                this.containerElement = document.createElementNS("http://www.w3.org/2000/svg", "g");
                 this.containerElement.setAttribute("id", this.containerId);
                 this.svgElement.appendChild(this.containerElement);
 

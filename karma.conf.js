@@ -80,7 +80,7 @@ module.exports = function(config) {
           windowName: 'my-window',
           settings: {
             webSecurityEnabled: false
-          },
+          }
         },
         flags: ['--load-images=true'],
         debug: true

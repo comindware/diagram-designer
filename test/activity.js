@@ -76,6 +76,22 @@ define(["js/activity/activity", './renderHelpers', 'js/activity/sequence'], func
             activity.render();
         });
 
+        it("invokes templated renderer when it available", function(){
+            var activity = fakeActivityWithContainersSetup(
+                {
+                    template: testSettings.primitiveActivityTemplate
+                },
+                d3.select(this.containerElement));
+
+            spyOn(activity, "handlebarTemplate").and.callThrough();
+            spyOn(activity, "__appendTemplatedGhost");
+
+            activity.render();
+
+            expect(activity.handlebarTemplate).toHaveBeenCalledTimes(1);
+
+        });
+
         it("renders template when created from string template", function() {
             var activity = fakeActivityWithContainersSetup(
                 { template: testSettings.primitiveActivityTemplate },
@@ -83,6 +99,7 @@ define(["js/activity/activity", './renderHelpers', 'js/activity/sequence'], func
 
             activity.render();
 
+            console.log(this.svgElement);
             // 2 - activity itself & standard resize points set
             expect($("svg g.js-activity-resize-root").length).toBe(1);
         });
