@@ -49,11 +49,11 @@
             }
         });
 
-        require(["handlebars", "d3"], function(handlebars, d3) {
+        require(["handlebars", "d3"], function (handlebars, d3) {
             window.d3 = d3;
             window.Handlebars = handlebars;
-            require(["backbone", "marionette"], function() {
-                require(['demo/app'], function(app) {
+            require(["backbone", "marionette"], function () {
+                require(['demo/app'], function (app) {
                     app.start()
                 });
             });
@@ -62,14 +62,37 @@
 
     </script>
 
-    <link href="demo/diagram.css" rel="stylesheet" />
+    <link href="demo/diagram.css" rel="stylesheet"/>
 
 </head>
 
 <body>
-<div class="wrapper js-graphContainer">
 
-</div>
+div class="wrapper">
+<header>
+    <h1>Diagram-designer</h1>
+
+    <p></p>
+
+    <p class="view"><a href="https://github.com/comindware/diagram-designer">View the Project on GitHub
+        <small>comindware/diagram-designer</small>
+    </a></p>
+
+
+    <ul>
+        <li><a href="https://github.com/comindware/diagram-designer/zipball/master">Download <strong>ZIP
+            File</strong></a></li>
+        <li><a href="https://github.com/comindware/diagram-designer/tarball/master">Download <strong>TAR
+            Ball</strong></a></li>
+        <li><a href="https://github.com/comindware/diagram-designer">View On <strong>GitHub</strong></a></li>
+    </ul>
+</header>
+<section>
+
+    <div class="js-graphContainer">
+
+    </div>
+</section>
 
 <script src="javascripts/scale.fix.js"></script>
 
