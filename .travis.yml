@@ -7,7 +7,7 @@ before_script:
 
 deploy:
   provider: releases
-  api-key: "$gitHubApiKey"
+  api_key: "$gitHubApiKey"
   file:
     - lib/diagram-designer-core.js
     - bower.json
