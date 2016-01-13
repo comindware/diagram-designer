@@ -4,3 +4,14 @@ node_js:
 before_script:
   - npm install -g bower
   - bower install
+
+deploy:
+  provider: releases
+  api-key: $gitHubApiKey
+  file:
+    - lib/diagram-designer-core.js
+    - bower.json
+  skip_cleanup: true
+  on:
+    branch: release
+    tags: true

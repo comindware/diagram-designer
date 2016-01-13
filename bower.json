@@ -1,7 +1,7 @@
 {
   "name": "diagram-designer-core",
-  "description": "",
-  "main": "index.js",
+  "description": "core objects to edit collection of activities",
+  "main": 'lib/diagram-designer-core.js',
   "authors": [
     "Nikolay Volf",
     "Grigory Kuznetsov"
@@ -12,9 +12,9 @@
     "designer"
   ],
   "moduleType": [
-    "amd"
+    "umd"
   ],
-  "homepage": "",
+  "homepage": "https://github.com/comindware/diagram-designer/blob/master/README.md",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -23,7 +23,9 @@
     "tests",
     "test-main.js",
     "build.js",
-    "karma.conf.js"
+    "karma.conf.js",
+    "js",
+    "demo"
   ],
   "dependencies": {
     "handlebars": "~4.0.5",
