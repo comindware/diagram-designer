@@ -1,0 +1,52 @@
+{
+  "name": "diagram-designer-core",
+  "description": "core objects to edit collection of activities",
+  "main": "lib/diagram-designer-core.js",
+  "authors": [
+    "Nikolay Volf",
+    "Grigory Kuznetsov"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "diagram",
+    "designer"
+  ],
+  "moduleType": [
+    "umd"
+  ],
+  "homepage": "https://github.com/comindware/diagram-designer/blob/master/README.md",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "test-main.js",
+    "build.js",
+    "karma.conf.js",
+    "js",
+    "demo"
+  ],
+  "dependencies": {
+    "handlebars": "~4.0.5",
+    "jquery": "~2.1.4",
+    "underscore": "~1.8.3",
+    "backbone": "~1.2.3",
+    "backbone.marionette": "marionette#~2.4.4",
+    "d3": "~3.5.12",
+    "requirejs": "~2.1.22"
+  },
+  "devDependencies": {
+    "requirejs": "~2.1.22"
+  },
+  "version": "0.2.5",
+  "_release": "0.2.5",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.2.5",
+    "commit": "10eeb77df5c38292e528873ecc5ef0762049a1f2"
+  },
+  "_source": "git://github.com/comindware/diagram-designer.git",
+  "_target": "~0.2.5",
+  "_originalSource": "diagram-designer-core"
+}
