@@ -45,4 +45,4 @@ npm install -g bower
 
 simple github demo (version can be other than current master):
 
-https://rawgit.com/comindware/diagram-designer/trash/githubDemo/demo/github.html
+https://comindware.github.io/diagram-designer/demo.html
