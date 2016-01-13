@@ -109,6 +109,7 @@ define([
 
         __createContainers: function(cfg) {
             this.graphContainer = this.container || $('.js-graphContainer');
+
             this.svg = d3.select(this.graphContainer[0])
                 .append('svg')
                 .html(this.svgTemplate)
@@ -122,7 +123,25 @@ define([
             this.$el = $(this.svg[0]);
 
             this.svgNode = this.svg.node();
+
+            this.htmlContainer = d3
+                .select(this.graphContainer[0])
+                .style({ position: 'relative' })
+                .append("div")
+                .classed({ "dd-html-container" : true })
+                .style({
+                    position: 'absolute',
+                    'z-index': 1000,
+                    top: '0px',
+                    bottom: '0px',
+                    left: '0px',
+                    right: '0px',
+                    'background-color': 'rgba(255, 255, 255, 0.0)',
+                    opacity: 1.0,
+                    'pointer-events': 'none'
+                });
         },
+
 
         setDefaultScroll: function(options) {
             this.scroll = options.scroll || { x: 60, y: 0 };

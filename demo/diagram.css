@@ -97,3 +97,29 @@ circle.dev-diagram-connector.js-diagram-connector-visible.js-diagram-connector-h
 .g-selected .diagram-activity-rectangle, .g-selected .diagram-activity-circle {
     stroke-width: 3;
 }
+
+.rect-hover:hover {
+    fill: rgb(220, 220, 220)
+}
+
+.sequence-back-container {
+    opacity: 0.7
+}
+
+.sequence-back-container:hover {
+    opacity: 1
+}
+
+.sequence-back-container:hover .rect-hover {
+    fill: black;
+}
+
+.activity-title {
+    cursor: default;
+    stroke: black;
+    fill: black;
+}
+
+.dd-overlay-editor-area {
+    z-index: 1000
+}

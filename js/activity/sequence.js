@@ -172,7 +172,7 @@ function (helpers) {
         },
 
         getPosition: function() {
-            return { x: this.x + 3, y: this.y };
+            return { x: this.x, y: this.y };
         },
 
         getScale: function() {
@@ -183,7 +183,10 @@ function (helpers) {
 
             var position = this.getPosition();
 
-            this.backElement = helpers.appendTranslatedGroup(this.container, position);
+            this.backElement = helpers
+                .appendTranslatedGroup(this.container, position);
+            this.backElement.classed({ "sequence-back-container" : true });
+
             this.backElement.append("rect").attr({
                 width: this.backWidth,
                 height: this.backHeight,
@@ -196,7 +199,7 @@ function (helpers) {
                 .classed( { "rect-hover": true });
 
             this.contentElement = helpers.appendTranslatedGroup(this.backElement, { x: 0, y: 0 });
-            this.contentElement.attr({ "transform": this.contentElement.attr("transform") + " scale(" + this.getScale() + ")" });
+            this.contentElement.attr({ "transform": this.contentElement.attr("transform") });
             this.contentElement.html(this.tpl(this.getHelper()));
 
 

@@ -139,7 +139,7 @@ function (helpers, ActivityViewModel, astar) {
             if (!this.moveEvent)
                 return;
 
-            var closerTo = this.getEventPosition(this.moveEvent);
+            var closerTo = this.__getEventPosition(this.moveEvent);
             var dx = helpers.substractPoint(closerTo, this.mouseEnterSegment.position);
             helpers.transformPoint(
                 this.mouseEnterSegment.position,

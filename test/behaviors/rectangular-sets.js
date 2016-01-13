@@ -3,13 +3,13 @@ function(behaviors){
 
     var getTestSubject = function() {
         return new Marionette.Object();
-    }
+    };
 
     var getTestSubjectWithDimension = function() {
         var subject = new Marionette.Object();
         subject.getDimensions = jasmine.createSpy("getDimensions").and.returnValue({ width: 999, height: 444 });
         return subject;
-    }
+    };
 
     describe("rectangular resizers", function() {
 

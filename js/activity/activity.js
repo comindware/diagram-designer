@@ -336,7 +336,6 @@ define([
             this.activityG.selectAll('*').remove();
             this.appendViewItems();
             this.resizeRoot = this.activityG.select(".js-activity-resize-root");
-            this.appendTitle();
             this.__bindEvents();
         },
 
@@ -1159,7 +1158,6 @@ define([
         __appendServiceNodes: function() {
             this.appendConnectorsNodes();
             this.appendResizers();
-            this.appendTitle();
             this.__updateControlNodes();
         },
 
@@ -1428,74 +1426,8 @@ define([
             return this.parent.containerToClientXY(position);
         },
 
-        getTitleLayout: function () {
-            // abstract
-            return {
-                exists: false,
-                x: 0,
-                y: 0,
-                width: 0,
-                height: 0,
-                textWidth: 0,
-                isMandatory: false
-            }
-        },
-
-        titleTemplate: Handlebars.compile(titleAreaTemplate),
-
-        appendTitle: function () {
-            var self = this;
-
-            var titleLayout = self.getTitleLayout();
-            if (!titleLayout || !titleLayout.exists)
-                return;
-
-            var textWidth = titleLayout.textWidth;
-            var containerWidth = titleLayout.width;
-            var title = this.getTitle() || "No title";
-
-            var titleHtml;
-            if (!self.model.attributes.isTitleSet && !titleLayout.isMandatory) titleHtml = "";
-            else titleHtml = self.getTitleDisplayHtml();
-
-            if (self.titleContainer)
-                self.titleContainer.remove();
-
-            this.titleG = this.activityG.select(".js-title-content");
-            if (!this.titleG.empty()) {
-                self.titleContainer = self.titleG.append("foreignObject");
-            }
-            else
-                self.titleContainer = self.activityG.append("foreignObject");
-
-            self.titleContainer.attr("x", titleLayout.x)
-                .attr("y", titleLayout.y)
-                .attr("width", containerWidth)
-                .attr("height", titleLayout.height)
-                .classed({ "null-space": true })
-                .html(titleHtml);
-
-
-
-            this.activityG.on("dblclick", self.activityDblClick.bind(self));
-
-        },
-
         $root: function (selector, d3obj) {
             return $(selector, d3obj ? $(d3obj[0][0]) : $(this.activityG[0][0]));
-        },
-
-        getTitleDisplayHtml: function () {
-            var titleLayout = this.getTitleLayout();
-            return this.titleTemplate({
-                titleWidth: titleLayout.textWidth,
-                width: titleLayout.width,
-                height: titleLayout.height,
-                title: this.model.attributes.title,
-                isEdited: false,
-                isCenterAligned: titleLayout.isCenterAligned,
-                isVerticalCenterAligned: titleLayout.isVerticalCenterAligned
-            });
         },
 
         getSvgPlacedRect: function (drect) {
@@ -1509,57 +1441,6 @@ define([
                 width: this.parent.scale * rect.width,
                 height: this.parent.scale * rect.height
             }
-        },
-
-        activityDblClick: function () {
-            if (this.parent.isReadOnly)
-                return;
-
-            var self = this;
-
-            var titleLayout = self.getTitleLayout();
-            if (!titleLayout || !titleLayout.exists)
-                return;
-
-            var foreign = self.titleContainer;
-
-            var rect = this.getPlacedRect();
-            rect.x += (titleLayout.overlayEditorX || titleLayout.x);
-            rect.y += (titleLayout.overlayEditorY || titleLayout.y);
-            rect.width = titleLayout.width;
-            rect.height = titleLayout.height;
-            rect = self.transformSvgRect(rect);
-
-            self.__hideControlElements();
-
-            var editorHtml = self.titleTemplate(_.extend({ titleWidth: titleLayout.textWidth, title: self.model.attributes.title, isEdited: true }, titleLayout));
-
-            var overlayEditor = self.overlayG.append("foreignObject")
-                .attr("x", rect.x)
-                .attr("y", rect.y)
-                .attr("width", rect.width)
-                .attr("height", rect.height)
-                .append("xhtml:body")
-                .classed({
-                    'activity-text-center-vertical': titleLayout.isVerticalCenterAligned,
-                    'non-selectable': true,
-                    'js-activity-shape': true
-                })
-                .html(editorHtml);
-
-            foreign.html("");
-            self.$root(".js-bpmn-titleAreaEdit", overlayEditor).focus();
-            self.$root(".js-bpmn-titleAreaEdit", overlayEditor).select();
-
-            self.$root(".js-bpmn-titleAreaEdit", overlayEditor).on("blur", function () {
-                var oldTitle = self.model.get("title");
-                var newTitle = self.$root(".js-bpmn-titleAreaEdit", overlayEditor).val();
-                self.model.set({"title": newTitle, isTitleSet: self.model.get("isTitleSet") || (oldTitle != newTitle) });
-
-                overlayEditor.remove();
-
-                foreign.html(self.getTitleDisplayHtml());
-            });
         },
 
         getTitle: function () {

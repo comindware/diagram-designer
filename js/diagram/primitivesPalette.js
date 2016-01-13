@@ -58,6 +58,7 @@ function(ToolboxGroup, ToolboxElement, Activity, FlowView, ActivitySequence, beh
     Rectangle.Activity = Activity.extend({
         initialize: function(cfg) {
             behaviors.setupDeclarative(this,
+                'titled',
                 'rectangular-resizers',
                 'rectangular-shaped-connector-set',
                 'info-button');
@@ -76,13 +77,13 @@ function(ToolboxGroup, ToolboxElement, Activity, FlowView, ActivitySequence, beh
     Rectangle.ColorSequence = function() {
         return ActivitySequence.create({type: 'Rectangle'}, [
             {
-                tpl: Handlebars.compile("<rect fill='white' stroke='olive'x=2 y=2  width=16 height=10 />")
+                tpl: Handlebars.compile("<rect fill='white' stroke='olive'x=4 y=4  width=28 height=20 />")
             },
             {
-                tpl: Handlebars.compile("<rect fill='white' stroke='navy' x=2 y=2 width=16 height=10 />")
+                tpl: Handlebars.compile("<rect fill='white' stroke='navy' x=4 y=4 width=28 height=20 />")
             },
             {
-                tpl: Handlebars.compile("<rect fill='white' stroke='pink' x=2 y=2  width=16 height=10 />")
+                tpl: Handlebars.compile("<rect fill='white' stroke='pink' x=4 y=4  width=28 height=20 />")
             }
         ]);
     };
