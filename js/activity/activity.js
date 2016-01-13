@@ -537,43 +537,39 @@ define([
             this.overlayG = this.__resolveParentContainer('overlay-g');
         },
 
-        __createNodes: function(node) {
+        __createNodes: function() {
             if (this.activityG)
                 this.activityG.remove();
-            this.activityG = node.append('g').classed({'activity-g': true});
+            this.activityG = this.rootNode.append('g').classed({'activity-g': true});
 
             if (this.connectorsG)
                 this.connectorsG.remove();
-            this.connectorsG = node.append('g').classed({'connectors-g': true});
+            this.connectorsG = this.rootNode.append('g').classed({'connectors-g': true});
 
             if (this.resizersG)
                 this.resizersG.remove();
-            this.resizersG = node.append('g').classed({'resizers-g': true });
+            this.resizersG = this.rootNode.append('g').classed({'resizers-g': true });
 
             if (this.nodeOverlayG)
                 this.nodeOverlayG.remove();
-            this.nodeOverlayG = node.append('g').classed({'node-overlay-g': true });
+            this.nodeOverlayG = this.rootNode.append('g').classed({'node-overlay-g': true });
         },
 
         generateView: function () {
             var attributes = this.getLayout();
             var classes = this.getClasses();
-            var node = this.getElementStub();
             var position = this.getPosition();
 
-            this.__createNodes(node);
             this.__updateParentContainers();
+            this.rootNode = helpers.appendTranslatedGroup(this.parentContainer, position);
+            this.rootNode
+                .classed(classes)
+                .attr(attributes)
+                .datum(this);
 
-            node.attr({'transform': 'translate(' + position.x + ',' + position.y + ')' });
-
-            node.classed(classes);
-            node.attr(attributes);
-            node.datum(this);
-
+            this.__createNodes();
             this.appendViewItems();
             this.__ghostEntity && this.__setGhostPosition(position);
-
-            return node;
         },
 
         receiveDragOver: false,
@@ -1173,13 +1169,8 @@ define([
         render: function () {
             this.isHidden = false;
 
-            var node = this.generateView();
             this.__updateContainer();
-            this.parentContainer.select(function () {
-                return this.appendChild(node[0][0]);
-            });
-
-            this.rootNode = node;
+            this.generateView();
 
             if (this.isInvalid)
                 this.invalidate();

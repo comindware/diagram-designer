@@ -7,6 +7,7 @@ define(['js/diagram/diagram', 'js/activity/activity', './renderHelpers'], functi
         fakeId1: "id.fake.1",
         fakeId2: "id.fake.2",
         randomActivityType: "rectangle", // guarantee to be random
+        randomActivityType2: "rectangle2", // guarantee to be random
         primitiveActivityTemplate: '<g class="js-activity-resize-root"><rect x=0 y=0 width=100 height=100></rect></g>',
         primitiveActivityTemplateWithId: '<g class="js-activity-resize-root" id="{{id}}"><rect x=0 y=0 width=100 height=100></rect></g>',
         graphContainerClass: "js-graphContainer"
@@ -21,6 +22,16 @@ define(['js/diagram/diagram', 'js/activity/activity', './renderHelpers'], functi
         }
 
     };
+
+    var importTestData = [
+        {
+            id: testSettings.fakeId1,
+            type: testSettings.randomActivityType
+        },
+        {
+            id: testSettings.fakeId2,
+            type: testSettings.randomActivityType2
+        }]
 
     var getFakeDiagramWithMapper = function() {
         var diagram = new Diagram();
@@ -92,6 +103,29 @@ define(['js/diagram/diagram', 'js/activity/activity', './renderHelpers'], functi
             expect(diagram.viewModels.length).toBe(1);
         });
 
+        it("can export activities", function() {
+            var diagram = getFakeDiagramWithMapper();
+            diagram.addNewActivity({
+                type: testSettings.randomActivityType
+            });
+
+            var exportData = diagram.collection.export();
+
+            expect(exportData.length).toBe(1);
+            expect(exportData[0].type).toBe(testSettings.randomActivityType);
+
+        })
+
+        it("can import activities", function() {
+            var diagram = getFakeDiagramWithMapper();
+            diagram.setCollection(importTestData);
+
+            var viewModel = diagram.getViewModelById(testSettings.fakeId1);
+
+            expect(viewModel).not.toBe(undefined);
+            expect(viewModel).not.toBe(null);
+
+        })
 
 
     });

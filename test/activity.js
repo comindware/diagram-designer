@@ -57,6 +57,8 @@ define(["js/activity/activity", './renderHelpers', 'js/activity/sequence'], func
             expect(activity.isHidden).toBe(true);
         })
 
+        it("")
+
     });
 
     describe("activity simple rendering", function() {
@@ -92,16 +94,55 @@ define(["js/activity/activity", './renderHelpers', 'js/activity/sequence'], func
 
         });
 
-        it("renders template when created from string template", function() {
+        it("passes populated template to the d3 element initialization", function() {
+
+            var activity = fakeActivityWithContainersSetup(
+                {
+                    template: testSettings.primitiveActivityTemplate
+                },
+                d3.select(this.containerElement));
+
+            spyOn(activity, "__appendTemplatedGhost");
+            spyOn(activity, "__appendServiceNodes");
+
+            activity.activityG = {
+                html: jasmine.createSpy("activityG.html")
+            };
+
+            activity.appendViewItems();
+
+            expect(activity.activityG.html).toHaveBeenCalledTimes(1);
+            expect(/js-activity-resize-root/g.test(activity.activityG.html.calls.argsFor(0)[0])).toBe(true);
+
+        });
+
+        it("creates nodes only once during render", function(){
             var activity = fakeActivityWithContainersSetup(
                 { template: testSettings.primitiveActivityTemplate },
                 d3.select(this.containerElement));
 
+            spyOn(activity, "__createNodes").and.callThrough();
+
             activity.render();
 
-            console.log(this.svgElement);
-            // 2 - activity itself & standard resize points set
-            expect($("svg g.js-activity-resize-root").length).toBe(1);
+            expect(activity.__createNodes).toHaveBeenCalledTimes(1);
+
+
+        });
+
+        it("renders template when created from string template", function() {
+            var activity = fakeActivityWithContainersSetup(
+                {
+                    template: testSettings.primitiveActivityTemplate,
+                    isHidden: true
+                },
+                d3.select(this.containerElement));
+
+            activity.render();
+
+            //console.log(this.svgElement);
+            //// 2 - activity itself & standard resize points set
+            //expect($("svg g.js-activity-resize-root").length).toBe(1);
         });
 
         it("generates view when rendered", function() {

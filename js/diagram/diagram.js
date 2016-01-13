@@ -58,15 +58,18 @@ define([
 
         this.remove = function(model) {
             this.models.slice(_.indexOf(model), 1);
-        }
+        };
 
         this.model = function(attributes) {
             return new Activity.SelfHostedModel(attributes);
-        }
+        };
 
         this.saveModel = function(model) {
+        };
 
-        }
+        this.export = function() {
+            return _.invoke(this.models, "toJSON");
+        };
     };
 
     return Marionette.Object.extend({
@@ -263,7 +266,6 @@ define([
                         this.addNewActivity(activityModel.attributes);
                 }.bind(this));
 
-            this.setExistingDefaultPool();
             this.updateViewModelStates();
         },
 
@@ -668,12 +670,6 @@ define([
         startExisting: function (id) {
             this.purge();
             this.id = id;
-        },
-
-        setExistingDefaultPool: function () {
-            this.defaultPool = _.find(this.viewModels, function (vm) {
-                return  vm.isOfType("Pool");
-            });
         },
 
         pushUpdatedObjectHistory: function(viewModel) {
