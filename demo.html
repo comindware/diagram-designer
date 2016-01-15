@@ -5,8 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Diagram-designer by comindware</title>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
     <meta name="viewport" content="width=device-width">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -66,56 +68,41 @@
 
 <body>
 
-<div class="wrapper">
-    <header>
-        <h1>Diagram-designer</h1>
+    <section class="page-header">
+        <h1 class="project-name">Diagram-designer</h1>
+        <h2 class="project-tagline"></h2>
+        <a href="https://github.com/comindware/diagram-designer" class="btn">View on GitHub</a>
+        <a href="https://github.com/comindware/diagram-designer/zipball/master" class="btn">Download .zip</a>
+        <a href="https://github.com/comindware/diagram-designer/tarball/master" class="btn">Download .tar.gz</a>
+        <a href="demo.html" class="btn">Demo</a>
+        <a href="index.html" class="btn">Home</a>
+    </section>
+    <section class="main-content">
+        <div class="js-graphContainer">
+        </div>
 
-        <p></p>
-
-        <p class="view"><a href="https://github.com/comindware/diagram-designer">View the Project on GitHub
-            <small>comindware/diagram-designer</small>
-        </a></p>
-
-
-        <ul>
-            <li><a href="https://github.com/comindware/diagram-designer/zipball/master">Download <strong>ZIP
-                File</strong></a></li>
-            <li><a href="https://github.com/comindware/diagram-designer/tarball/master">Download <strong>TAR
-                Ball</strong></a></li>
-            <li><a href="https://github.com/comindware/diagram-designer">View On <strong>GitHub</strong></a></li>
-        </ul>
-    </header>
-    <section>
-        <h2><a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>use hotkeys</h2>
-
+        <h2>use hotkeys</h2>
         <pre><code>
             Ctrl+C/V    Copy-Paste
             Ctrl+Z/Y    Undo-Redo
             Del         Delete
-        </code></pre>
 
-        <div class="js-graphContainer">
-        </div>
-
-        <p></p>
-
-        <h2><a id="hints" class="anchor" href="#hints" aria-hidden="true"><span class="octicon octicon-link"></span></a>more hints</h2>
-        <pre><code>
             Ctrl+Click    add to select
             Shift+Zone    multi-select
             Shift+Drag    move activity with opt
+
             Ctrl+Scroll   zoom in/out
             Shift+Scroll  scroll horizontally
             Double-click  edit activity name
         </code></pre>
     </section>
 
-    <footer>
+    <footer class="site-footer">
         <p>This project is maintained by <a href="https://github.com/comindware">comindware</a></p>
         <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
     </footer>
 
-    <script src="javascripts/scale.fix.js"></script>
+    </body>
 
 
 </html>
