@@ -11,6 +11,8 @@ define(['designer'], function(designer) {
 
             var primitivesPalette = new designer.palettes.PrimitivesPalette();
             primitivesPalette.install(this.diagram);
+            this.diagram.toolboxView.groups[0].position.y = 10;
+            this.diagram.toolboxView.render();
 
             $(window).on("resize", this.diagram.resize.bind(this.diagram));
         },
