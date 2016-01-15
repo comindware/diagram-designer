@@ -130,6 +130,7 @@ function(ToolboxGroup, ToolboxElement, Activity, FlowView, ActivitySequence, beh
             this.elements.push(new Flow());
             this.id = "primitivesGroup";
             this.title = "Primitives"
+            this.position = {x: 0, y:10};
         }
     });
 
