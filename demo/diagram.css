@@ -126,4 +126,5 @@ circle.dev-diagram-connector.js-diagram-connector-visible.js-diagram-connector-h
 
 .dd-info-window {
     border: 1px dotted black;
+    pointer-events: all;
 }
