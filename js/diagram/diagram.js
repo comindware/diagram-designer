@@ -180,15 +180,22 @@ define([
             this.on('activityResize', this.activityResize.bind(this));
         },
 
-        additionalActivitySelected: function(options) {
-            this.selected = _.isArray(this.selected) ? this.selected : [this.selected];
-            this.selected.push(options.sourceActivity);
-
-            this.foreachViewModels(function (viewModel) {
-                if (options.sourceActivity != viewModel)
+        leaveSingleControlElements: function(viewModel) {
+            this.foreachViewModels(function (vm) {
+                if (vm != viewModel)
                     viewModel.hideControlElements();
             });
+        },
 
+        additionalActivitySelected: function(options) {
+            if (this.selected)
+                this.selected = _.isArray(this.selected) ? this.selected : [this.selected];
+            else this.selected = [];
+
+            if (_.indexOf(this.selected, options.sourceActivity) < 0)
+                this.selected.push(options.sourceActivity);
+
+            this.leaveSingleControlElements(options.sourceActivity);
         },
 
         additionalActivityDeselected: function(options) {
@@ -526,7 +533,7 @@ define([
             if (event.altKey || event.ctrlKey || event.shiftKey) {
                 return;
             }
-            this.hideActivityInfo();
+            _.invoke(this.viewModels, "hideControlElements");
             this.deselectAll();
         },
 
@@ -724,8 +731,6 @@ define([
 
         deselectAll: function(isUserAction) {
             isUserAction = isUserAction !== false;
-            this.hideActivityInfo();
-            //this.toolboxView.deselectAndHideAll();
             delete this.selected;
             this.foreachViewModels(function (viewModel) {
                 viewModel.deselect(isUserAction);
@@ -742,7 +747,7 @@ define([
             if (!this.willHandleClick)
                 return;
 
-            this.deselectAll();
+            this.nullSpaceClick();
         },
 
         beginScroll: function(event) {
@@ -1291,10 +1296,6 @@ define([
             return viewModel;
         },
 
-        viewModelByModel: function(model) {
-            return ModelMapper.createViewByModel(model, this, false, true);
-        },
-
         __pushViewModel: function(viewModel) {
             this.viewModels.push(viewModel);
             this.viewModelsHash[viewModel.getId()] = viewModel;
@@ -1372,24 +1373,21 @@ define([
         },
 
         dragIt: function (event) {
-            var self = this;
-
-            self.fireControlZonesEvents(event);
+            this.fireControlZonesEvents(event);
 
             var clientXY = helpers.getPointFromParameter([event.clientX, event.clientY]);
-            var delta = helpers.substractPoint(clientXY, self.startDrag);
-            self.startDrag = clientXY;
+            var delta = helpers.substractPoint(clientXY, this.startDrag);
+            this.startDrag = clientXY;
 
-            helpers.multiplyPoint(delta, 1 / self.scale);
+            helpers.multiplyPoint(delta, 1 / this.scale);
 
             if (helpers.isZeroPoint(delta))
                 return;
 
-            if (!self.isDragConsumated)
-                self.selectedDragStart(event);
+            if (!this.isDragConsumated)
+                this.selectedDragStart(event);
 
             this.isDragConsumated = true;
-
             this.willHandleClick = false;
 
             this.eachSelectedAndDragged().invoke("updatePosition", delta);
@@ -1406,13 +1404,6 @@ define([
                     position: position
                 };
 
-            this.draggedViewModel.removeFutureRect();
-
-            if (this.tempLane) {
-                this.tempLane.owner.removeTempLane();
-            }
-            delete this.tempLane;
-
             var currentDragOwner = null;
 
             var viewModelsQue = _.chain(this.viewModels);
@@ -1424,7 +1415,7 @@ define([
                 .indexBy("layer")
                 .some(
                 function (viewModel) {
-                    viewModel.trigger('dragOver', eventArgs);
+                    viewModel.dragOver(eventArgs);
                     if (eventArgs.stop)
                         currentDragOwner = eventArgs.owner || viewModel;
 

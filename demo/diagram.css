@@ -123,3 +123,7 @@ circle.dev-diagram-connector.js-diagram-connector-visible.js-diagram-connector-h
 .dd-overlay-editor-area {
     z-index: 1000
 }
+
+.dd-info-window {
+    border: 1px dotted black;
+}

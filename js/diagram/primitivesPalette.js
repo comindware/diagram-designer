@@ -62,7 +62,9 @@ function(ToolboxGroup, ToolboxElement, Activity, FlowView, ActivitySequence, beh
                 'titled',
                 'rectangular-resizers',
                 'rectangular-shaped-connector-set',
-                'info-button');
+                'info-button',
+                'info-window'
+            );
             behaviors.subActivitySpawnSequence.setup(this, { sequence: Rectangle.ColorSequence() });
 
             _.extend(cfg, {

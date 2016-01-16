@@ -7,6 +7,7 @@ define([
     './RectangularResizers',
     './SubActivitySpawnSequence',
     './InfoButton',
+    './InfoWindow',
     './Titled'
 ],
 
@@ -19,6 +20,7 @@ function(
     RectangularResizers,
     SubActivitySpawnSequence,
     InfoButton,
+    InfoWindow,
     Titled)
 {
     var behaviors = {
@@ -30,6 +32,7 @@ function(
         rectangularResizers: RectangularResizers,
         subActivitySpawnSequence: SubActivitySpawnSequence,
         infoButton: InfoButton,
+        infoWindow: InfoWindow,
         titled: Titled,
         setupDeclarative: function(activity) {
             var args = _.rest(arguments, 1);

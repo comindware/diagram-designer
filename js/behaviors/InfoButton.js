@@ -14,12 +14,13 @@ define(['../utils/d3utils'], function(helpers) {
         apply: function(activity, position) {
             _.wrapThrough(activity, "__updateControlNodes", this.__updateControlNodes);
             _.wrapThrough(activity, "__bindEvents", this.__bindEvents);
-            _.wrapThrough(activity, "__hideControlElements", this.__hideControlElements);
 
             _.bindAllTo(activity, this,
                 "__syncInfoButtonPosition",
                 "__infoBtnOnmouseover",
                 "__infoBtnOnclick",
+                "__activateInfoBtn",
+                "__deactivateInfoBtn",
                 "__infoBtnOnmouseout",
                 "__showInfoBtn",
                 "__hideInfoBtn",
@@ -36,10 +37,6 @@ define(['../utils/d3utils'], function(helpers) {
             }
         },
 
-        __hideControlElements: function() {
-            this.__hideInfoBtn();
-        },
-
         __getInfoBtnPosition: function() {
             var dimensions = this.getDimensions();
             return { x: dimensions.width + this.infoButtonPosition.x, y: this.infoButtonPosition.y }
@@ -53,7 +50,6 @@ define(['../utils/d3utils'], function(helpers) {
             this.__appendInfoBtn();
         },
 
-
         __infoBtnOnmouseover: function () {
             this.infoBtn.hoverCircle
                 .style({'opacity': 1});
@@ -64,11 +60,10 @@ define(['../utils/d3utils'], function(helpers) {
 
 
         __infoBtnOnclick: function () {
-            this.parent.activityInfoClicked(this);
         },
 
         __infoBtnOnmouseout: function () {
-            if (this.infoBtn.isActive)
+            if (this.__persistInfoButton)
                 return;
 
             this.infoBtn.hoverCircle
@@ -98,7 +93,8 @@ define(['../utils/d3utils'], function(helpers) {
                 .style({'display': 'none'})
                 .classed('activity-info-btn', true)
                 .on('mouseover', this.__infoBtnOnmouseover)
-                .on('mouseout', this.__infoBtnOnmouseout);
+                .on('mouseout', this.__infoBtnOnmouseout)
+                .on('click', this.__infoBtnOnclick)
 
             var pointAttrs = {
                 width: 2,
@@ -128,6 +124,24 @@ define(['../utils/d3utils'], function(helpers) {
 
         },
 
+        __activateInfoBtn: function() {
+            this.__persistInfoButton = true;
+
+            this.infoBtn.style({'display': 'block'});
+            this.__showInfoBtn();
+        },
+
+        __deactivateInfoBtn: function() {
+            this.__persistInfoButton = false;
+
+            this.infoBtn.hoverCircle
+                .style({'opacity': 0});
+
+            this.infoBtn.btnPoints.selectAll('*')
+                .attr({'fill': '#3e94cc'});
+
+        },
+
         __showInfoBtnUser: function() {
             clearTimeout(this.__activityInfiBtnTimer);
             this.infoBtn.style({'display': 'block'});
@@ -135,6 +149,9 @@ define(['../utils/d3utils'], function(helpers) {
         },
 
         __hideInfoBtnUser: function(timeout) {
+            if (this.__persistInfoButton)
+                return;
+
             var delayedHide = function () {
                 this.infoBtn.style({'display': 'none'});
             }.bind(this);
@@ -151,10 +168,8 @@ define(['../utils/d3utils'], function(helpers) {
         },
 
         __bindEvents: function () {
-            this.parent.givenActivityInfoAvailable(this, function() {
-                this.rootNode.on('mouseenter', this.__onActivityInfoBtnMouseenter);
-                this.rootNode.on('mouseleave', this.__onActivityInfoBtnMouseleave);
-            }.bind(this));
+            this.rootNode.on('mouseenter', this.__onActivityInfoBtnMouseenter);
+            this.rootNode.on('mouseleave', this.__onActivityInfoBtnMouseleave);
         }
 
 

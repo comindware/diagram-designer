@@ -63,7 +63,8 @@ define(['../utils/d3utils'], function(helpers) {
                 overlayEditorWidth: size.width - 15,
                 overlayEditorHeight: size.height - 30,
                 lineHeight: 18
-            }
+            };
+
             if (this.__titleLayout)
                 _.extend(defaults, _.result(this, "__titleLayout"));
 

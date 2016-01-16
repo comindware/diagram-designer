@@ -142,6 +142,9 @@ define([
 
         },
 
+        dragOver: function(args) {
+        },
+
         __syncScalableComponents: function() {
             this.__setupComponentScale(this.activityG);
             this.__setupComponentScale(this.resizersG);
@@ -648,26 +651,6 @@ define([
                 height: (this.model.get("size") ? this.model.get("size").height : 0) || 0
             }
         },
-
-        addFutureRect: function (rect) {
-            var pos = this.getPosition();
-
-            this.futureRect = this.ghostG.append('rect')
-                .attr({
-                    'x': 0,
-                    'y': 0,
-                    width: rect.width,
-                    height: rect.height,
-                    stroke: '#009d28',
-                    fill: '#87c540',
-                    'stroke-width': 6,
-                    'stroke-dasharray': '15 10',
-                    'opacity': 0.3,
-                    transform: this.rootNode.attr('transform')
-                })
-                .classed({'future-rect': true});
-        },
-
 
         __showGhostEntity: function () {
             if (!this.__ghostEntity)
