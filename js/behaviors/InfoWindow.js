@@ -22,10 +22,11 @@ define(['../utils/d3utils'], function(helpers) {
 
             _.bindAllTo(activity, this,
                 "showInfo",
-                "__afterShowInfo",
                 "hideInfo");
 
-            activity.infoWindowTemplate = Handlebars.compile(options ? options.template : "<div />");
+            if (options && options.template)
+                activity.infoWindowTemplate = Handlebars.compile(options.template);
+
             activity.infoWindowOptions = options || {};
         },
 
@@ -59,10 +60,6 @@ define(['../utils/d3utils'], function(helpers) {
 
         },
 
-        __afterShowInfo: function() {
-
-        },
-
         showInfo: function() {
             var rect = this.getPlacedRect();
             helpers.transformPoint(rect, this.__getInfoBtnPosition());
@@ -91,7 +88,7 @@ define(['../utils/d3utils'], function(helpers) {
                 })
                 .html(html);
 
-            this.__afterShowInfo();
+            this.__infoWindowAfterShow && this.__infoWindowAfterShow();
         },
 
         hideInfo: function() {
