@@ -10,8 +10,7 @@ define([
             _.extend(this, cfg);
             this.selected = false;
             this.effectiveParentContainer = cfg.container || cfg.parent.container;
-
-
+            this.modelOptions = {};
         },
 
         bindEvents: function () {
@@ -143,7 +142,8 @@ define([
                 clientY: d3event.clientY,
                 type: this.type,
                 kind: this.kind,
-                source: this
+                source: this,
+                options: this.modelOptions
             };
         },
 
