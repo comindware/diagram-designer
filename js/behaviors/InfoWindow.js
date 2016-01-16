@@ -22,6 +22,7 @@ define(['../utils/d3utils'], function(helpers) {
 
             _.bindAllTo(activity, this,
                 "showInfo",
+                "__afterShowInfo",
                 "hideInfo");
 
             activity.infoWindowTemplate = Handlebars.compile(options ? options.template : "<div />");
@@ -58,6 +59,10 @@ define(['../utils/d3utils'], function(helpers) {
 
         },
 
+        __afterShowInfo: function() {
+
+        },
+
         showInfo: function() {
             var rect = this.getPlacedRect();
             helpers.transformPoint(rect, this.__getInfoBtnPosition());
@@ -68,6 +73,10 @@ define(['../utils/d3utils'], function(helpers) {
                 this.overlayInfoWindow = this.parent.htmlContainer
                     .append("div");
             };
+
+            var html = this.infoWindowOptions.html
+                ? _.result(this.infoWindowOptions, "html")
+                : this.infoWindowTemplate(this.getTemplateHelpers());
 
             this.overlayInfoWindow
                 .style({
@@ -80,7 +89,9 @@ define(['../utils/d3utils'], function(helpers) {
                 .classed({
                     'dd-info-window': true
                 })
-                .html(this.infoWindowTemplate(this.getTemplateHelpers()));
+                .html(html);
+
+            this.__afterShowInfo();
         },
 
         hideInfo: function() {
