@@ -58,9 +58,12 @@ define([
             return d3.select(window.document.createElementNS('http://www.w3.org/2000/svg', 'g'));
         },
 
+        defaultModelAttributes: {
+        },
+
         __readConfig: function(cfg) {
             this.isTemp = cfg.isTemp || false;
-            this.model = cfg.model || (new SelfHostedModel());
+            this.model = cfg.model || (new SelfHostedModel(JSON.parse(JSON.stringify(this.defaultModelAttributes))));
             this.parent = cfg.parent;
             this.isHidden = !cfg.parent || cfg.isHidden;
 
