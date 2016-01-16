@@ -154,6 +154,7 @@ define([
         },
 
 
+        /** sets scroll to default or the provided one */
         setDefaultScroll: function(options) {
             this.scroll = options.scroll || { x: 60, y: 0 };
 
@@ -170,36 +171,6 @@ define([
             if (this.isReadOnly)
                 this.containers['object-g'].bringToFront();
 
-        },
-
-        createActivityInfo: function() {
-            var selector = $('.js-activity-info-container');
-            this.activityInfo = new ActivityInfoView({ parent: this });
-            this.activityInfo.render();
-            selector.append(this.activityInfo.$el);
-            this.activityInfo.onShow();
-        },
-
-        givenActivityInfoAvailable: function(activity, callback) {
-            this.subjectActivity = activity;
-            if (_.result(this, "doShowActivityInfo", true)) {
-                callback(activity);
-            }
-        },
-
-        showActivityInfo: function(activity) {
-            this.givenActivityInfoAvailable(activity, this.activityInfo.setActivity.bind(this.activityInfo));
-        },
-
-        showCapabilityDiagram: function(id) {
-            this.trigger("load:capability", id);
-        },
-
-        hideActivityInfo: function() {
-            if (this.activityInfo) {
-                this.activityInfo.activity = null;
-                this.activityInfo.hide();
-            }
         },
 
         wireInternalEvents: function() {
@@ -896,7 +867,6 @@ define([
                 return;
 
             this.isDragConsumated = true;
-            this.hideActivityInfo();
             this.anchor = clientXY;
             helpers.transformPoint(this.scroll, delta, [1 / this.scale, 1 / this.scale ]);
             this.limitScroll();
@@ -1954,13 +1924,6 @@ define([
 
         },
 
-        activityInfoClicked: function(source) {
-            if (this.activityInfo.activity == source)
-                this.hideActivityInfo();
-            else
-                this.showActivityInfo(source);
-        },
-
         getSelectedSetExternals: function() {
             var singular = this.getSelectedSingular();
             if (singular)
@@ -2048,15 +2011,10 @@ define([
 
         deleteViewModel: function (viewModelToDelete) {
 
-            try {
-                var linked = viewModelToDelete.getLinkedActivities();
-                _.each(linked, function (linkedActivity) {
-                    linkedActivity.linkedActivityRemoved(viewModelToDelete);
-                });
-            }
-            catch(e) {
-
-            }
+            var linked = viewModelToDelete.getLinkedActivities();
+            _.each(linked, function (linkedActivity) {
+                linkedActivity.linkedActivityRemoved(viewModelToDelete);
+            });
 
             this.viewModels.splice(this.viewModels.indexOf(viewModelToDelete), 1);
 
@@ -2155,49 +2113,6 @@ define([
             this.messageNode && this.messageNode.remove();
             this.svgNode.style.pointerEvents = 'none';
         },
-
-        browseEmbeddedProcess: function(activity) {
-            var eventArgs = {
-                targetActivityId: activity.getId(),
-                enabled: true
-            };
-            this.trigger("browse:embedded", eventArgs);
-            if (!eventArgs.enabled)
-                return;
-
-            this.setDefaultScroll({ uodate: true });
-
-            if (activity == null) {
-                this.activeEmbeddedProcessId = null;
-                this.activeEmbeddedProcess = null;
-                this.updateFromCollection();
-                this.trigger("embedded:leave");
-                return;
-            }
-
-            this.activeEmbeddedProcessId = activity.getId();
-            this.activeEmbeddedProcess = activity;
-            this.trigger("embedded:enter", { title: activity.getTitle(), id: activity.getId( )});
-            this.updateFromCollection();
-            this.trigger("embedded:entered", { title: activity.getTitle(), id: activity.getId( )});
-        },
-
-        browseEmbeddedProcessId: function(activityId) {
-            this.setDefaultScroll({ update: true });
-
-            if (activityId == null) {
-                this.activeEmbeddedProcessId = null;
-                this.activeEmbeddedProcess = null;
-                this.updateFromCollection();
-                return;
-            }
-
-            this.activeEmbeddedProcessId = activityId;
-            this.updateFromCollection();
-
-            this.activeEmbeddedProcess = this.getViewModelById(activityId);
-
-        }
 
     });
 });
