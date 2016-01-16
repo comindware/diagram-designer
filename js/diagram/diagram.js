@@ -871,6 +871,8 @@ define([
             if (helpers.isZeroPoint(delta))
                 return;
 
+            _.invoke(this.viewModels, "hideControlElements");
+
             this.isDragConsumated = true;
             this.anchor = clientXY;
             helpers.transformPoint(this.scroll, delta, [1 / this.scale, 1 / this.scale ]);

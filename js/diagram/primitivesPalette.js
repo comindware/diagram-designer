@@ -62,10 +62,10 @@ function(ToolboxGroup, ToolboxElement, Activity, FlowView, ActivitySequence, beh
                 'titled',
                 'rectangular-resizers',
                 'rectangular-shaped-connector-set',
-                'info-button',
-                'info-window'
+                'info-button'
             );
             behaviors.subActivitySpawnSequence.setup(this, { sequence: Rectangle.ColorSequence() });
+            behaviors.infoWindow.setup(this, { template: "<div style='padding: 10px'>This is simple popup activity info</div>"});
 
             _.extend(cfg, {
                 template: '<g transform="{{dimScale}}"  class="js-activity-resize-root">' +

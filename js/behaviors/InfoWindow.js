@@ -4,9 +4,9 @@ define(['../utils/d3utils'], function(helpers) {
 
     var config = {
 
-        defaultWidth: "100px",
-        defaultHeight: "200px",
-        defaultOffsetLeft: 30,
+        defaultWidth: "150px",
+        defaultHeight: "100px",
+        defaultOffsetLeft: 25,
         defaultOffsetTop: -20
     };
 
@@ -18,6 +18,7 @@ define(['../utils/d3utils'], function(helpers) {
         apply: function (activity, options) {
             _.wrapThrough(activity, "__hideControlElements", this.__hideControlElements);
             _.wrapThrough(activity, "__infoBtnOnclick", this.__infoBtnOnclick);
+            _.wrapThrough(activity, "__showDefaultControlElement", this.__showDefaultControlElement);
 
             _.bindAllTo(activity, this,
                 "showInfo",
@@ -29,6 +30,13 @@ define(['../utils/d3utils'], function(helpers) {
 
 
         __hideControlElements: function() {
+            this.hideInfo();
+            if (this.__persistInfoButton) {
+                this.__deactivateInfoBtn();
+            }
+        },
+
+        __showDefaultControlElement: function() {
             this.hideInfo();
             if (this.__persistInfoButton) {
                 this.__deactivateInfoBtn();
