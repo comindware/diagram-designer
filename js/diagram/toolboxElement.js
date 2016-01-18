@@ -143,7 +143,7 @@ define([
                 type: this.type,
                 kind: this.kind,
                 source: this,
-                options: this.modelOptions
+                options: JSON.parse(JSON.stringify(this.modelOptions))
             };
         },
 
