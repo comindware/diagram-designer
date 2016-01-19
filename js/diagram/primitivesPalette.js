@@ -23,6 +23,10 @@ function(ToolboxGroup, ToolboxElement, Activity, FlowView, ActivitySequence, beh
     });
 
     Circle.Activity = Activity.extend({
+        defaultModelAttributes: {
+            size: { width: 50, height: 50}
+        },
+
         initialize: function(cfg) {
             behaviors.setupDeclarative(this,
                 'rectangular-resizers',

@@ -1229,6 +1229,9 @@ define([
             var self = this;
 
             var viewConstructor = this.modelMapper.matchModel(model);
+            if (viewConstructor.prototype.defaultModelAttributes)
+                _.extend(model.attributes, JSON.parse(JSON.stringify(viewConstructor.prototype.defaultModelAttributes)));
+
             this.draggedViewModel = new viewConstructor ({ model: model, parent: this });
             this.draggedViewModel.isTemp = true;
 
@@ -1269,7 +1272,7 @@ define([
             }
 
             var model = this.collection.add(obj);
-            var viewModel = this.addNewActivityViaModel(model);
+            var viewModel = this.addNewActivityViaModel(model, true);
 
             if (options.direction && options.connect) {
                 var rect = viewModel.getDimensions();
@@ -1303,8 +1306,13 @@ define([
             this.viewModelsHash[viewModel.getId()] = viewModel;
         },
 
-        addNewActivityViaModel: function(model) {
+        addNewActivityViaModel: function(model, isNew) {
             var ActivityView = this.modelMapper.matchModel(model);
+
+            if (isNew && ActivityView.prototype.defaultModelAttributes)
+                _.extend(model.attributes, JSON.parse(JSON.stringify(ActivityView.prototype.defaultModelAttributes)));
+
+
             var view = new ActivityView(
                 {
                     model: model,
