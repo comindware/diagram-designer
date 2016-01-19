@@ -799,7 +799,6 @@ define([
         moveMultiSelect: function(event) {
             if (!this.isDragConsumated) {
                 this.isDragConsumated = true;
-                this.hideActivityInfo();
                 this.createSelectFrame();
             }
 
