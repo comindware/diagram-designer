@@ -126,8 +126,6 @@ define(["js/activity/activity", './renderHelpers', 'js/activity/sequence'], func
             activity.render();
 
             expect(activity.__createNodes).toHaveBeenCalledTimes(1);
-
-
         });
 
         it("renders template when created from string template", function() {

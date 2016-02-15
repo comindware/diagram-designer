@@ -10,13 +10,13 @@ define([
     "diagram/diagram",
     "diagram/primitivesPalette",
     "diagram/toolboxGroup",
-    "diagram/toolboxElement"
+    "diagram/toolboxElement",
+    "utils/d3utils"
 ],
 
-function(activity, flow, sequence, behaviors, diagram, primitivesPalette, toolboxGroup, toolboxElement) {
+function(activity, flow, sequence, behaviors, diagram, primitivesPalette, toolboxGroup, toolboxElement, d3utils) {
 
     return {
-
         activities: {
             Activity: activity,
             Flow: flow,
@@ -34,8 +34,10 @@ function(activity, flow, sequence, behaviors, diagram, primitivesPalette, toolbo
             PrimitivesPalette: primitivesPalette
         },
 
+        utils: d3utils,
+
         behaviors: behaviors
-    }
+    };
 
 });
 
